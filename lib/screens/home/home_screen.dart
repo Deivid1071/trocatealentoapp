@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trocatalentos_app/screens/configscreens/config_screen.dart';
 import 'package:trocatalentos_app/widgets/custom_drawer.dart';
 import 'package:trocatalentos_app/widgets/customappbar.dart';
 
@@ -30,7 +31,7 @@ class HomeScreen extends StatelessWidget {
         ),
         Scaffold(
           appBar: CustomAppBar(title: 'Configurações',).build(context),
-          body: Container(color: Colors.red,),
+          body: UserConfigScreen(),
           drawer: CustomDrawer(_pageController),
         )
       ],
