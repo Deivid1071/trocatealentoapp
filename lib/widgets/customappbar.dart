@@ -11,7 +11,7 @@ class CustomAppBar extends StatelessWidget {
       iconTheme: IconThemeData(
         color: Colors.white,
       ),
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: Color(0xFF3CC9A4),
       elevation: 0,
       title: Text(title, style: TextStyle(
         fontFamily: 'Nunito',
