@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:trocatalentos_app/screens/home/home_screen.dart';
 import 'package:trocatalentos_app/screens/home/register_screen.dart';
 import 'package:trocatalentos_app/utilities/constants.dart';
 import 'package:trocatalentos_app/widgets/custom_text_field.dart';
+
+import 'forgot_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -66,7 +69,8 @@ class _LoginScreenState extends State<LoginScreen> {
     return Container(
       alignment: Alignment.centerRight,
       child: FlatButton(
-        onPressed: () => print('Forgot Password Button Pressed'),
+        onPressed: () => Navigator.push(
+            context, MaterialPageRoute(builder: (context) => ForgotScreen())),
         padding: EdgeInsets.only(right: 0.0),
         child: Text(
           'Esqueci a senha',
@@ -82,7 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
       width: double.infinity,
       child: RaisedButton(
         elevation: 5.0,
-        onPressed: () => print('Login Button Pressed'),
+        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen())),
         padding: EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.0),
