@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:trocatalentos_app/screens/home/register_screen.dart';
 import 'package:trocatalentos_app/utilities/constants.dart';
 import 'package:trocatalentos_app/widgets/custom_text_field.dart';
 
@@ -21,7 +22,10 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         SizedBox(height: 10.0),
         CustomTextField(
-          prefix: Icon(Icons.email, color: Colors.white,),
+          prefix: Icon(
+            Icons.email,
+            color: Colors.white,
+          ),
           hint: 'Digite seu e-mail',
           textInputType: TextInputType.emailAddress,
         ),
@@ -39,15 +43,19 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         SizedBox(height: 10.0),
         CustomTextField(
-          prefix: Icon(Icons.email, color: Colors.white,),
+          prefix: Icon(
+            Icons.email,
+            color: Colors.white,
+          ),
           hint: 'Digite sua senha',
           textInputType: TextInputType.emailAddress,
           obscure: true,
           suffix: IconButton(
-            icon: Icon(Icons.visibility_off, color: Colors.white,),
-            onPressed: (){
-
-            },
+            icon: Icon(
+              Icons.visibility_off,
+              color: Colors.white,
+            ),
+            onPressed: () {},
           ),
         ),
       ],
@@ -67,8 +75,6 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-
-
 
   Widget _buildLoginBtn() {
     return Container(
@@ -95,9 +101,6 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -157,15 +160,21 @@ class _LoginScreenState extends State<LoginScreen> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('Ainda não possui cadastro ?', style: TextStyle(
-                            fontFamily: 'Nunito',
-                            color: Colors.white,
-                          ),),
+                          Text(
+                            'Ainda não possui cadastro ?',
+                            style: TextStyle(
+                              fontFamily: 'Nunito',
+                              color: Colors.white,
+                            ),
+                          ),
                           Container(
                             margin: EdgeInsets.only(left: 15),
                             alignment: Alignment.centerRight,
                             child: FlatButton(
-                              onPressed: () => print('Forgot Password Button Pressed'),
+                              onPressed: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => RegisterScreen())),
                               padding: EdgeInsets.only(right: 0.0),
                               child: Text(
                                 'Cadastre-se',

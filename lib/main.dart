@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:trocatalentos_app/screens/login_screen.dart';
+import 'file:///C:/Users/deivi/AndroidStudioProjects/trocatalentos_app/lib/screens/home/login_screen.dart';
 
 void main() {
   runApp(MyApp());
