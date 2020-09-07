@@ -29,6 +29,9 @@ class _SchedulesScreenState extends State<SchedulesScreen> {
               height: 40,
             ),
             _buildListInvite('Solicitações enviadas'),
+            SizedBox(
+              height: 40,
+            ),
             _buildListSchedule('Agendamentos confirmados'),
           ],
         ),

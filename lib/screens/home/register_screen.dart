@@ -11,6 +11,8 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   bool _rememberMe = false;
 
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

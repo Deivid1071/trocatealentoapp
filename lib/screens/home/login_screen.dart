@@ -1,11 +1,13 @@
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:trocatalentos_app/controllers/login_controller/login_controller.dart';
+import 'package:trocatalentos_app/utilities/constants.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:trocatalentos_app/screens/home/home_screen.dart';
 import 'package:trocatalentos_app/screens/home/register_screen.dart';
-import 'package:trocatalentos_app/utilities/constants.dart';
 import 'package:trocatalentos_app/widgets/custom_text_field.dart';
-
-import 'forgot_screen.dart';
+import 'package:trocatalentos_app/screens/home/home_screen.dart';
+import 'package:trocatalentos_app/screens/home/forgot_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -13,7 +15,14 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  bool _rememberMe = false;
+  LoginController loginController;
+  bool errorTextField = false;
+
+  @override
+  void initState() {
+    loginController = LoginController();
+    super.initState();
+  }
 
   Widget _buildEmailTF() {
     return Column(
@@ -25,6 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         SizedBox(height: 10.0),
         CustomTextField(
+          onChanged: loginController.setEmail,
           prefix: Icon(
             Icons.email,
             color: Colors.white,
@@ -45,22 +55,26 @@ class _LoginScreenState extends State<LoginScreen> {
           style: kLabelStyle,
         ),
         SizedBox(height: 10.0),
-        CustomTextField(
-          prefix: Icon(
-            Icons.email,
-            color: Colors.white,
-          ),
-          hint: 'Digite sua senha',
-          textInputType: TextInputType.emailAddress,
-          obscure: true,
-          suffix: IconButton(
-            icon: Icon(
-              Icons.visibility_off,
+        Observer(builder: (_) {
+          return CustomTextField(
+            prefix: Icon(
+              Icons.email,
               color: Colors.white,
             ),
-            onPressed: () {},
-          ),
-        ),
+            hint: 'Digite sua senha',
+            textInputType: TextInputType.emailAddress,
+            obscure: !loginController.passwordVisible ? true : false,
+            suffix: IconButton(
+              icon: Icon(
+                !loginController.passwordVisible
+                    ? Icons.visibility_off
+                    : Icons.visibility,
+                color: Colors.white,
+              ),
+              onPressed: loginController.togglePasswordVisibility,
+            ),
+          );
+        })
       ],
     );
   }
@@ -81,28 +95,39 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _buildLoginBtn() {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 25.0),
-      width: double.infinity,
-      child: RaisedButton(
-        elevation: 5.0,
-        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen())),
-        padding: EdgeInsets.all(15.0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
-        ),
-        color: Colors.white,
-        child: Text(
-          'LOGIN',
-          style: TextStyle(
-            color: Color(0xFF2F9C7F),
-            letterSpacing: 1.5,
-            fontSize: 18.0,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'Nunito',
+    return Observer(
+      builder: (_) {
+        return Container(
+          padding: EdgeInsets.symmetric(vertical: 25.0),
+          width: double.infinity,
+          child: RaisedButton(
+            elevation: 5.0,
+            onPressed: () {
+
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
+            },
+            padding: EdgeInsets.all(15.0),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30.0),
+            ),
+            color: Colors.white,
+            child: loginController.loading
+                ? CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation(Colors.white),
+                  )
+                : Text(
+                    'LOGIN',
+                    style: TextStyle(
+                      color: Color(0xFF2F9C7F),
+                      letterSpacing: 1.5,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Nunito',
+                    ),
+                  ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -154,6 +179,17 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       SizedBox(height: 30.0),
                       _buildEmailTF(),
+                      errorTextField
+                          ? Container(
+                              width: MediaQuery.of(context).size.width,
+                              child: Text(
+                                'Digite um e-mail válido',
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 10),
+                              ),
+                            )
+                          : Container(),
                       SizedBox(
                         height: 30.0,
                       ),
