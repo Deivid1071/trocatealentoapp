@@ -21,11 +21,6 @@ class HomeScreen extends StatelessWidget {
 
         ),
         Scaffold(
-          appBar: CustomAppBar(title: 'Trocar Talentos',).build(context),
-          drawer: CustomDrawer(_pageController),
-          body: Container(color: Colors.deepPurple,),
-        ),
-        Scaffold(
           appBar: CustomAppBar(title: 'Agendamentos',).build(context),
           body: SchedulesScreen(),
           drawer: CustomDrawer(_pageController),

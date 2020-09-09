@@ -87,10 +87,9 @@ class CustomDrawer extends StatelessWidget {
                 height: 50,
               ),
               DrawerTile(Icons.home, "Início", pageController, 0),
-              DrawerTile(Icons.search, "Trocar Talentos", pageController, 1),
               DrawerTile(
-                  Icons.calendar_today, "Agendamentos", pageController, 2),
-              DrawerTile(Icons.settings, "Configurações", pageController, 3),
+                  Icons.calendar_today, "Agendamentos", pageController, 1),
+              DrawerTile(Icons.settings, "Configurações", pageController, 2),
             ],
           )
         ],
