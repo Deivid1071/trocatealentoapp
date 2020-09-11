@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trocatalentos_app/model/user.dart';
 import 'package:trocatalentos_app/screens/configscreens/config_screen.dart';
 import 'package:trocatalentos_app/screens/schedules/schedules_screen.dart';
 import 'package:trocatalentos_app/widgets/custom_drawer.dart';
@@ -10,6 +11,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(User.name);
     return PageView(
       controller: _pageController,
       physics: NeverScrollableScrollPhysics(),

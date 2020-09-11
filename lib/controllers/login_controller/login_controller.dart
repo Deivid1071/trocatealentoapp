@@ -27,6 +27,8 @@ abstract class _LoginController with Store {
   @observable
   bool loading = false;
 
+
+
   @observable
   bool loggedIn = false;
 

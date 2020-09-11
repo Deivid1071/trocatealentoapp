@@ -1,10 +1,13 @@
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:trocatalentos_app/controllers/login_controller/login_controller.dart';
+import 'package:trocatalentos_app/model/user.dart';
+import 'package:trocatalentos_app/services/auth_api_service.dart';
 import 'package:trocatalentos_app/utilities/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:trocatalentos_app/screens/home/register_screen.dart';
+import 'package:trocatalentos_app/widgets/custom_alertdialog.dart';
 import 'package:trocatalentos_app/widgets/custom_text_field.dart';
 import 'package:trocatalentos_app/screens/home/home_screen.dart';
 import 'package:trocatalentos_app/screens/home/forgot_screen.dart';
@@ -17,10 +20,12 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   LoginController loginController;
   bool errorTextField = false;
+  AuthorizationApiService api;
 
   @override
   void initState() {
     loginController = LoginController();
+    api = AuthorizationApiService();
     super.initState();
   }
 
@@ -61,6 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Icons.email,
               color: Colors.white,
             ),
+            onChanged: loginController.setPassword,
             hint: 'Digite sua senha',
             textInputType: TextInputType.emailAddress,
             obscure: !loginController.passwordVisible ? true : false,
@@ -102,8 +108,26 @@ class _LoginScreenState extends State<LoginScreen> {
           width: double.infinity,
           child: RaisedButton(
             elevation: 5.0,
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
+            onPressed: () async {
+              if(loginController.isEmailValid){
+                loginController.loading = true;
+                await api.authorize(loginController.email, loginController.password);
+                loginController.loading = false;
+                if(User.userId != null){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
+                }else{
+                  showDialog(
+                    context:  context,
+                    builder:  (BuildContext context) {
+                      return CustomAlertDialog();
+                    },
+                  );
+                }
+              }else{
+                setState(() {
+                  errorTextField = true;
+                });
+              }
             },
             padding: EdgeInsets.all(15.0),
             shape: RoundedRectangleBorder(
