@@ -15,6 +15,14 @@ class User {
     tcoin = json['user']['tcoin'];
   }
 
+
+  User.fromJsonRegister(Map<String, dynamic> json) {
+    userId = json['id'];
+    name = json['username'];
+    email = json['email'];
+    tcoin = json['tcoin'];
+  }
+
 }
 
 class UserResponse {
@@ -26,6 +34,11 @@ class UserResponse {
   UserResponse.fromJson(Map<String, dynamic> json)
       : result = User.fromJson(json),
         error = "";
+
+  UserResponse.fromJsonRegister(Map<String, dynamic> json)
+      : result = User.fromJsonRegister(json),
+        error = "";
+
 
   UserResponse.withError(String errorValue)
       : result = null,//

@@ -20,12 +20,12 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   LoginController loginController;
   bool errorTextField = false;
-  AuthorizationApiService api;
+  AuthorizationApiService authApi;
 
   @override
   void initState() {
     loginController = LoginController();
-    api = AuthorizationApiService();
+    authApi = AuthorizationApiService();
     super.initState();
   }
 
@@ -109,21 +109,23 @@ class _LoginScreenState extends State<LoginScreen> {
           child: RaisedButton(
             elevation: 5.0,
             onPressed: () async {
-              if(loginController.isEmailValid){
+              if (loginController.isEmailValid) {
                 loginController.loading = true;
-                await api.authorize(loginController.email, loginController.password);
+                await authApi.authorize(
+                    loginController.email, loginController.password);
                 loginController.loading = false;
-                if(User.userId != null){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
-                }else{
+                if (User.userId != null) {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => HomeScreen()));
+                } else {
                   showDialog(
-                    context:  context,
-                    builder:  (BuildContext context) {
+                    context: context,
+                    builder: (BuildContext context) {
                       return CustomAlertDialog();
                     },
                   );
                 }
-              }else{
+              } else {
                 setState(() {
                   errorTextField = true;
                 });
@@ -136,7 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
             color: Colors.white,
             child: loginController.loading
                 ? CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation(Colors.white),
+                    valueColor: AlwaysStoppedAnimation(Color(0xFF2F9C7F)),
                   )
                 : Text(
                     'LOGIN',
@@ -209,7 +211,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                 'Digite um e-mail válido',
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
-                                    color: Colors.white, fontSize: 10),
+                                  color: Colors.white,
+                                  fontSize: 10,
+                                  fontFamily: 'Nunito',
+                                ),
                               ),
                             )
                           : Container(),

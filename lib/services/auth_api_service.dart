@@ -39,7 +39,45 @@ class AuthorizationApiService {
           break;
       }
     } on TimeoutException catch (e) {
-      return UserResponse.withError("Timeout: $e");
+      return UserResponse.withError("Tempo de conexão expirado, por favor tente novamente");
+    } catch (e) {
+      return UserResponse.withError("ERROR: $e");
+    }
+  }
+
+
+  Future<UserResponse> register(String name, String email, String password) async {
+    try {
+      final response = await http
+          .post("$_baseUrl/users",
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Accept': 'application/json'
+          },
+          body: jsonEncode(<String, dynamic>{
+            'username': name,
+            'email': email,
+            'password': password,
+
+          }))
+          .timeout(const Duration(seconds: 10));
+
+      print(response.statusCode);
+      print(json.decode(response.body));
+      switch (response.statusCode) {
+        case 200:
+          return UserResponse.fromJsonRegister(json.decode(response.body));
+          break;
+        case 400:
+          return UserResponse.withError(json.decode(response.body));
+          break;
+        default:
+          return UserResponse.withError(
+              "${response.statusCode}: ${response.body}");
+          break;
+      }
+    } on TimeoutException catch (e) {
+      return UserResponse.withError("Tempo de conexão expirado, por favor tente novamente");
     } catch (e) {
       return UserResponse.withError("ERROR: $e");
     }
