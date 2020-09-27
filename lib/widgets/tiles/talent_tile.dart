@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:trocatalentos_app/model/talent.dart';
 
+import '../custom_alertdialog.dart';
+
 class TalentTile extends StatefulWidget {
   final Talent talent;
 
@@ -26,7 +28,23 @@ class _TalentTileState extends State<TalentTile> {
         color: Color(0xFF3CC9A4),
         child: InkWell(
           onTap: () {
-            print('Clicked');
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text('App em Desenvolvimento'),
+                  content: Text('Futuramente aqui você verá  detalhes sobre o talento escolhido'),
+                  actions: [
+                    FlatButton(
+                      child: Text("OK"),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
+                );
+              },
+            );
           },
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

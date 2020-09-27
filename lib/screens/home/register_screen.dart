@@ -282,14 +282,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
         child: RaisedButton(
           elevation: 5.0,
           onPressed: () async {
-            if (registerController.isEmailValid) {
+            /*if (registerController.isEmailValid) {
               registerController.loading = true;
               UserResponse response =  await authApi.register(registerController.nome,
                   registerController.email, registerController.password);
               registerController.loading = false;
               if (User.name != null) {
-                /*Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => HomeScreen()));*/
+                *//*Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => HomeScreen()));*//*
                 registerController.loading = true;
                 await Future.delayed(Duration(seconds: 1));
                 await authApi.authorize(
@@ -306,7 +306,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   },
                 );
               }
-            }
+            }*/
+            registerController.loading = true;
+            await Future.delayed(Duration(seconds: 2));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => HomeScreen()));
+            registerController.loading = false;
           },
           padding: EdgeInsets.all(15.0),
           shape: RoundedRectangleBorder(

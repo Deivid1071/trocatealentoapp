@@ -15,11 +15,27 @@ class SchedulesScreen extends StatefulWidget {
 class _SchedulesScreenState extends State<SchedulesScreen> {
   ProposalApiService proposalApi;
   ScheduleApiService scheduleApi;
+  List<Proposal> proposalList;
+  List<Schedule> scheduleList;
 
   @override
   void initState() {
     proposalApi = ProposalApiService();
     scheduleApi = ScheduleApiService();
+     proposalList = [];
+     scheduleList = [];
+     for(int i = 0; i<11 ; i++){
+       proposalList.add(
+           Proposal(
+               tcoin: i
+           ));
+     }
+    for(int i = 0; i<11 ; i++){
+      scheduleList.add(
+          Schedule(
+            tcoin: i
+          ));
+    }
     super.initState();
   }
 
@@ -38,7 +54,9 @@ class _SchedulesScreenState extends State<SchedulesScreen> {
             SizedBox(
               height: 20,
             ),
-            FutureBuilder(
+          _buildListInvite('Propostas recebidas',
+              proposalList: proposalList, isSended: false),
+            /*FutureBuilder(
                 future: proposalApi.getProposalData(),
                 builder: (context, snapshot) {
                   switch (snapshot.connectionState) {
@@ -73,7 +91,7 @@ class _SchedulesScreenState extends State<SchedulesScreen> {
                       break;
                   }
                   return Container();
-                }),
+                }),*/
             /*SizedBox(
               height: 40,
             ),
@@ -81,7 +99,8 @@ class _SchedulesScreenState extends State<SchedulesScreen> {
             SizedBox(
               height: 40,
             ),
-            FutureBuilder(
+          _buildListSchedule('Agendamentos confirmados', scheduleList),
+            /*FutureBuilder(
                 future: scheduleApi.getScheduleData(),
                 builder: (context, snapshot) {
                   switch (snapshot.connectionState) {
@@ -115,7 +134,7 @@ class _SchedulesScreenState extends State<SchedulesScreen> {
                       break;
                   }
                   return Container();
-                }),
+                }),*/
           ],
         ),
       ),

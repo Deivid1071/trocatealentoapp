@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:trocatalentos_app/model/user.dart';
 import 'package:trocatalentos_app/screens/configscreens/config_screen.dart';
+import 'package:trocatalentos_app/screens/home/login_screen.dart';
 import 'package:trocatalentos_app/screens/schedules/schedules_screen.dart';
 import 'package:trocatalentos_app/screens/search_talent_screen/dart/search_talent_screen.dart';
 import 'package:trocatalentos_app/widgets/custom_drawer.dart';
@@ -32,6 +33,20 @@ class HomeScreen extends StatelessWidget {
           appBar: CustomAppBar(title: 'Configurações',).build(context),
           body: UserConfigScreen(),
           drawer: CustomDrawer(_pageController),
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+          floatingActionButton: GestureDetector(
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
+            },
+            child: Container(
+              height: 30,
+              width: 40,
+              child: Text('Sair', style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16
+              ),),
+            ),
+          ),
         )
       ],
     );

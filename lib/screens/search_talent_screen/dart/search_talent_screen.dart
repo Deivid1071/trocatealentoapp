@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:trocatalentos_app/model/talent.dart';
@@ -13,11 +15,38 @@ class _SearchTalentScreenState extends State<SearchTalentScreen> {
   TextEditingController _searchController;
   TalentApiService api;
   String search = "";
+  List<Talent> talentList;
 
   @override
   void initState() {
     _searchController = TextEditingController();
     api = TalentApiService();
+    talentList = [];
+    talentList.add(Talent(
+      userName: 'Jose',
+      talentTitle: 'Programador',
+      tcoin: 2,
+    ));
+    talentList.add(Talent(
+      userName: 'Paula',
+      talentTitle: 'Programador',
+      tcoin: 6,
+    ));
+    talentList.add(Talent(
+      userName: 'Ricardo',
+      talentTitle: 'Programador',
+      tcoin: 1,
+    ));
+    talentList.add(Talent(
+      userName: 'Alessandra',
+      talentTitle: 'Programador',
+      tcoin: 5,
+    ));
+    talentList.add(Talent(
+      userName: 'Paola',
+      talentTitle: 'Programador',
+      tcoin: 3,
+    ));
     super.initState();
   }
 
@@ -50,12 +79,13 @@ class _SearchTalentScreenState extends State<SearchTalentScreen> {
                           search = _searchController.text;
                         });
                       },
-                        child: Icon(
-                      Icons.search,
-                      color: Theme.of(context).primaryColor,
-                          size: 30,
-                    ),),
-                    hintText: 'Busque um talento',
+                      child: Icon(
+                        Icons.search,
+                        color: Theme.of(context).primaryColor,
+                        size: 30,
+                      ),
+                    ),
+                    hintText: 'Digite a palavra Programador e clique na busca',
                     hintStyle: TextStyle(
                       fontSize: 14,
                       fontFamily: 'Nunito',
@@ -75,7 +105,10 @@ class _SearchTalentScreenState extends State<SearchTalentScreen> {
               SizedBox(
                 height: 15,
               ),
-              FutureBuilder(
+              search == 'Programador'
+                  ? _buildListTalent('Resultado', talentList: talentList)
+                  : Container(child: Text("Por favor busque pela palavra 'Programador' para testar a aplicação"),),
+              /*FutureBuilder(
                   future: search.isNotEmpty && search != null ? api.getTalentBySearch(search) : null,
                   builder: (context, snapshot) {
                     switch (snapshot.connectionState) {
@@ -110,8 +143,7 @@ class _SearchTalentScreenState extends State<SearchTalentScreen> {
                         break;
                     }
                     return Container();
-                  }),
-              //_buildListSchedule('Resultado'),
+                  }),*/
             ],
           ),
         ),

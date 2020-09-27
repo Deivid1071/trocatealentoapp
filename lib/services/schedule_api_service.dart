@@ -10,7 +10,7 @@ import 'package:http/http.dart' as http;
 
 class ScheduleApiService {
   final String _baseUrl = environment['baseUrl'];
-  String authToken = User.token.replaceAll('"', '').trim();
+  //String authToken = User.token.replaceAll('"', '').trim();
 
   Future<ScheduleResponse> getScheduleData() async {
 
@@ -20,7 +20,7 @@ class ScheduleApiService {
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
             'Accept': 'application/json',
-             "Authorization": "Bearer $authToken"
+             //"Authorization": "Bearer $authToken"
           },
           )
           .timeout(const Duration(seconds: 10));

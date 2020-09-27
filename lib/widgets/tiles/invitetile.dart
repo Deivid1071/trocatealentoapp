@@ -26,7 +26,23 @@ class _InviteTileState extends State<InviteTile> {
         color: Color(0xFF3CC9A4),
         child: InkWell(
           onTap: () {
-            print('Clicked');
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text('App em Desenvolvimento'),
+                  content: Text('Futuramente aqui você verá  detalhes sobre a solicitação escolhida'),
+                  actions: [
+                    FlatButton(
+                      child: Text("OK"),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
+                );
+              },
+            );
           },
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,

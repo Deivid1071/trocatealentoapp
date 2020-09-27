@@ -5,7 +5,7 @@ class Proposal {
   int proposalId;
   String date;
 
-  Proposal(this.providerId,this.contractorId, this.tcoin,this.proposalId,this.date);
+  Proposal({this.providerId,this.contractorId, this.tcoin,this.proposalId,this.date});
 
   Proposal.fromJson(Map<String, dynamic> json){
     providerId = json['id_provider'];

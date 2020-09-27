@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 
 class ProposalApiService {
   final String _baseUrl = environment['baseUrl'];
-  String authToken = User.token.replaceAll('"', '').trim();
+  //String authToken = User.token.replaceAll('"', '').trim();
 
   Future<ProposalResponse> getProposalData() async {
 
@@ -19,7 +19,7 @@ class ProposalApiService {
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
             'Accept': 'application/json',
-            "Authorization": "Bearer $authToken"
+            //"Authorization": "Bearer $authToken"
           },
           )
           .timeout(const Duration(seconds: 10));

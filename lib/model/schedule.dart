@@ -5,7 +5,7 @@ class Schedule {
   int scheduleId;
   String date;
 
-  Schedule(this.providerId,this.contractorId, this.tcoin,this.scheduleId,this.date);
+  Schedule({this.providerId,this.contractorId, this.tcoin,this.scheduleId,this.date});
 
   Schedule.fromJson(Map<String, dynamic> json){
     providerId = json['id_provider'];

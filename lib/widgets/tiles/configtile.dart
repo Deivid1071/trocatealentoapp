@@ -23,7 +23,25 @@ class ConfigTile extends StatelessWidget {
           fontSize: 16
         ),),
         trailing: Icon(Icons.arrow_forward_ios, color: Colors.white,),
-        onTap: ()=> print('$text'),
+        onTap: (){
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('App em Desenvolvimento'),
+                content: Text('Futuramente aqui você verá  detalhes sobre $text'),
+                actions: [
+                  FlatButton(
+                    child: Text("OK"),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
+              );
+            },
+          );
+        },
       ),
     );
   }

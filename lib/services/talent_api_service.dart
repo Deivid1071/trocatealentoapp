@@ -11,7 +11,7 @@ import 'package:http/http.dart' as http;
 
 class TalentApiService {
   final String _baseUrl = environment['baseUrl'];
-  String authToken = User.token.replaceAll('"', '').trim();
+  //String authToken = User.token.replaceAll('"', '').trim();
 
   Future<TalentResponse> getTalentBySearch(String search) async {
 
@@ -21,13 +21,13 @@ class TalentApiService {
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
             'Accept': 'application/json',
-             "Authorization": "Bearer $authToken"
+             //"Authorization": "Bearer $authToken"
           },
           )
           .timeout(const Duration(seconds: 10));
 
-      print(response.statusCode);
-      print(json.decode(response.body));
+      //print(response.statusCode);
+      //print(json.decode(response.body));
       switch (response.statusCode) {
         case 200:
           return TalentResponse.fromJson(json.decode(response.body));

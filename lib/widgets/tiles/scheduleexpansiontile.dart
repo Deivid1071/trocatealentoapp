@@ -26,7 +26,7 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
         ),
         child: ExpansionTile(
           title: Text(
-            "Agendamento em ${widget.schedule.date}",
+            "Agendamento em ${DateTime.now()}",
             style: TextStyle(
               fontFamily: 'Nunito',
               fontWeight: FontWeight.bold,
