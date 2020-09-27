@@ -1,7 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:trocatalentos_app/model/talent.dart';
 
 class TalentTile extends StatefulWidget {
+  final Talent talent;
+
+  TalentTile(this.talent);
+
   @override
   _TalentTileState createState() => _TalentTileState();
 }
@@ -10,8 +15,8 @@ class _TalentTileState extends State<TalentTile> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height*0.38,
-      width: MediaQuery.of(context).size.width*0.7,
+      height: MediaQuery.of(context).size.height * 0.22,
+      width: MediaQuery.of(context).size.width * 0.7,
       padding: EdgeInsets.all(8),
       child: Card(
         elevation: 5,
@@ -20,7 +25,7 @@ class _TalentTileState extends State<TalentTile> {
         ),
         color: Color(0xFF3CC9A4),
         child: InkWell(
-          onTap: (){
+          onTap: () {
             print('Clicked');
           },
           child: Column(
@@ -34,50 +39,60 @@ class _TalentTileState extends State<TalentTile> {
                       Column(
                         children: [
                           Container(
-
                             margin: EdgeInsets.only(bottom: 10),
                             height: 85,
                             width: 85,
                             child: ClipRRect(
                                 borderRadius: BorderRadius.circular(100),
                                 child: Image.asset(
-                                  'assets/images/avatar.png',
+                                  //widget.talent.avatar ??
+                                      'assets/images/avatar.png',
                                   fit: BoxFit.cover,
                                 )),
                           ),
-                          Text('Nome', style: TextStyle(
-                              fontSize: 14,
-                              fontFamily: 'Nunito',
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold
-                          ),)
+                          Text(
+                            widget.talent.userName??"",
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontFamily: 'Nunito',
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          )
                         ],
                       ),
-                      Column(
-                        children: [
-                          Text('Titulo do Talento', style: TextStyle(
-                              fontSize: 14,
-                              fontFamily: 'Nunito',
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold
-                          ),),
-                          SizedBox(
-                            height: 30,
-                          ),
-                          Text('Tcoin: 3', style: TextStyle(
-                              fontSize: 14,
-                              fontFamily: 'Nunito',
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold
-                          ),)
-                        ],
+                      Container(
+                        child: Column(
+                          children: [
+                            Container(
+                              height: 40,
+                            ),
+                            Text(
+                              widget.talent.talentTitle,
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontFamily: 'Nunito',
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: 30,
+                            ),
+                            Text(
+                              "Custo: ${widget.talent.tcoin} Tcoin's" ,
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontFamily: 'Nunito',
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            )
+                          ],
+                        ),
                       )
                     ],
                   ),
-
                 ],
-              ),
-              SizedBox(
+              )
+              /*SizedBox(
                 height: 25,
               ),
               Container(
@@ -88,7 +103,7 @@ class _TalentTileState extends State<TalentTile> {
                     color: Colors.white,
                     fontWeight: FontWeight.bold
                 ),),
-              )
+              )*/
             ],
           ),
         ),

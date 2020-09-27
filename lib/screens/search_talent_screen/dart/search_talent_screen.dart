@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:trocatalentos_app/model/talent.dart';
+import 'package:trocatalentos_app/services/talent_api_service.dart';
 import 'package:trocatalentos_app/widgets/tiles/talent_tile.dart';
 
 class SearchTalentScreen extends StatefulWidget {
@@ -9,47 +11,107 @@ class SearchTalentScreen extends StatefulWidget {
 
 class _SearchTalentScreenState extends State<SearchTalentScreen> {
   TextEditingController _searchController;
+  TalentApiService api;
+  String search = "";
 
   @override
   void initState() {
     _searchController = TextEditingController();
+    api = TalentApiService();
     super.initState();
   }
+
+  Future<dynamic> futureBuilder;
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       physics: NeverScrollableScrollPhysics(),
       child: GestureDetector(
-        onTap: (){
+        onTap: () {
           FocusScope.of(context).requestFocus(new FocusNode());
         },
         child: Container(
           padding: EdgeInsets.all(16),
           child: Column(
             children: [
-              TextField(
-                style: TextStyle(
-                  fontSize: 14,
-                  fontFamily: 'Nunito',
-                ),
-                controller: _searchController,
-                decoration: InputDecoration(
-                  hintText: 'Busque um talento',
-                  hintStyle: TextStyle(
+              Container(
+                height: 55,
+                child: TextField(
+                  style: TextStyle(
                     fontSize: 14,
                     fontFamily: 'Nunito',
-                    fontStyle: FontStyle.italic,
                   ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
+                  controller: _searchController,
+                  decoration: InputDecoration(
+                    suffixIcon: GestureDetector(
+                      onTap: () async {
+                        setState(() {
+                          search = _searchController.text;
+                        });
+                      },
+                        child: Icon(
+                      Icons.search,
+                      color: Theme.of(context).primaryColor,
+                          size: 30,
+                    ),),
+                    hintText: 'Busque um talento',
+                    hintStyle: TextStyle(
+                      fontSize: 14,
+                      fontFamily: 'Nunito',
+                      fontStyle: FontStyle.italic,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
                   ),
+                  onSubmitted: (value) async {
+                    setState(() {
+                      search = _searchController.text;
+                    });
+                  },
                 ),
               ),
               SizedBox(
                 height: 15,
               ),
-              _buildListSchedule('Resultado'),
+              FutureBuilder(
+                  future: search.isNotEmpty && search != null ? api.getTalentBySearch(search) : null,
+                  builder: (context, snapshot) {
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.none:
+                        break;
+                      case ConnectionState.waiting:
+                        return CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation(Color(0xFF2F9C7F)),
+                        );
+                        break;
+                      case ConnectionState.active:
+                        break;
+                      case ConnectionState.done:
+                        if (snapshot.hasData) {
+                          final TalentResponse response = snapshot.data;
+                          if (response.error.isNotEmpty) {
+                            return Center(
+                              child: Text(response.error),
+                            );
+                          } else {
+                            if (response.result.isNotEmpty && response.result != null) {
+                              print(response.result);
+                              return _buildListTalent('Resultado da busca', talentList: response.result);
+                            }else{
+                              return Center(
+                                child: Text('Talento não encontrado.'),
+                              );
+                            }
+                          }
+                        }
+                        return Container();
+                        break;
+                    }
+                    return Container();
+                  }),
+              //_buildListSchedule('Resultado'),
             ],
           ),
         ),
@@ -57,7 +119,7 @@ class _SearchTalentScreenState extends State<SearchTalentScreen> {
     );
   }
 
-  _buildListSchedule(String title) {
+  _buildListTalent(String title, {List<Talent> talentList}) {
     return Column(
       children: [
         Text(
@@ -69,13 +131,14 @@ class _SearchTalentScreenState extends State<SearchTalentScreen> {
               fontSize: 24),
         ),
         Container(
-          height: MediaQuery.of(context).size.height-220,
+          height: MediaQuery.of(context).size.height - 220,
           child: ListView.builder(
-            //physics: NeverScrollableScrollPhysics(),
-              itemCount: 4,
+              //physics: NeverScrollableScrollPhysics(),
+              itemCount: talentList.length,
               shrinkWrap: true,
               itemBuilder: (context, index) {
-                return TalentTile();
+                Talent talent = talentList[index];
+                return TalentTile(talent);
               }),
         ),
       ],

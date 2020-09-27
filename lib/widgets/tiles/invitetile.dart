@@ -1,8 +1,13 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:trocatalentos_app/model/proposal.dart';
 
 class InviteTile extends StatefulWidget {
+  final Proposal proposal;
+  final bool isSended;
+
+  InviteTile(this.proposal, this.isSended);
+
   @override
   _InviteTileState createState() => _InviteTileState();
 }
@@ -20,7 +25,7 @@ class _InviteTileState extends State<InviteTile> {
         ),
         color: Color(0xFF3CC9A4),
         child: InkWell(
-          onTap: (){
+          onTap: () {
             print('Clicked');
           },
           child: Column(
@@ -39,20 +44,24 @@ class _InviteTileState extends State<InviteTile> {
                           fit: BoxFit.cover,
                         )),
                   ),
-                  Text('Nome', style: TextStyle(
-                      fontSize: 14,
-                      fontFamily: 'Nunito',
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold
-                  ),)
+                  Text(
+                    'Nome',
+                    style: TextStyle(
+                        fontSize: 14,
+                        fontFamily: 'Nunito',
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
+                  )
                 ],
               ),
-              Text('Aceitar', style: TextStyle(
-                fontSize: 16,
-                fontFamily: 'Nunito',
-                color: Colors.white,
-                fontWeight: FontWeight.bold
-              ),)
+              Text(
+                !widget.isSended ? 'Aceitar' : 'Confirmar',
+                style: TextStyle(
+                    fontSize: 16,
+                    fontFamily: 'Nunito',
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
+              )
             ],
           ),
         ),

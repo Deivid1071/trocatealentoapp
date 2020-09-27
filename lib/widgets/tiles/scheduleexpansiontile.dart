@@ -1,7 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:trocatalentos_app/model/schedule.dart';
 
 class CustomExpansionTile extends StatefulWidget {
+  final Schedule schedule;
+
+  CustomExpansionTile(this.schedule);
   @override
   _CustomExpansionTileState createState() => _CustomExpansionTileState();
 }
@@ -22,7 +26,7 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
         ),
         child: ExpansionTile(
           title: Text(
-            "Agendamento ",
+            "Agendamento em ${widget.schedule.date}",
             style: TextStyle(
               fontFamily: 'Nunito',
               fontWeight: FontWeight.bold,
@@ -83,8 +87,18 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
                 ),
               ],
             ),
-            Text("Child Widget One"),
-            Text("Child Widget Two"),
+            Text('Descrição breve sobre o angedamento', style: TextStyle(
+                fontSize: 14,
+                fontFamily: 'Nunito',
+                color: Colors.white,
+                fontWeight: FontWeight.bold
+            ),),
+            Text('Observação ou lembrete breve sobre agendamento', style: TextStyle(
+                fontSize: 14,
+                fontFamily: 'Nunito',
+                color: Colors.white,
+                fontWeight: FontWeight.bold
+            ),),
           ],
           onExpansionChanged: (bool expanding) => setState(() => this.isExpanded = expanding),
         )

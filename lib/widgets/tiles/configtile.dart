@@ -14,6 +14,7 @@ class ConfigTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.symmetric(horizontal: 16),
       decoration: kBoxDecorationStyle,
       child: ListTile(
         leading: Icon(icon, color: Colors.white,),
