@@ -26,6 +26,7 @@ class ScheduleApiService {
           .timeout(const Duration(seconds: 10));
 
       print(response.statusCode);
+      print(json.decode(response.body));
       switch (response.statusCode) {
         case 200:
           return ScheduleResponse.fromJson(json.decode(response.body));

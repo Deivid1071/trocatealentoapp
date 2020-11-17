@@ -25,6 +25,7 @@ class ProposalApiService {
           .timeout(const Duration(seconds: 10));
 
       print(response.statusCode);
+      print(json.decode(response.body));
       switch (response.statusCode) {
         case 200:
 
