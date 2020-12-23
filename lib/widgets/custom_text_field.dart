@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:trocatalentos_app/utilities/constants.dart';
 
 class CustomTextField extends StatelessWidget {
 
   CustomTextField({this.hint, this.prefix, this.suffix, this.obscure = false,
-    this.textInputType, this.onChanged, this.enabled, this.controller
+    this.textInputType, this.onChanged, this.enabled, this.controller, this.maxLenght, this.height
   });
 
   final TextEditingController controller;
@@ -15,13 +16,15 @@ class CustomTextField extends StatelessWidget {
   final TextInputType textInputType;
   final Function(String) onChanged;
   final bool enabled;
+  final int maxLenght;
+  final double height;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.centerLeft,
       decoration: kBoxDecorationStyle,
-      height: 60.0,
+      height: height ?? 60.0,
       padding: prefix != null ? null : const EdgeInsets.only(left: 16),
       child: TextField(
         controller: controller,
@@ -41,6 +44,9 @@ class CustomTextField extends StatelessWidget {
           suffixIcon: suffix,
         ),
         textAlignVertical: TextAlignVertical.center,
+        inputFormatters: [
+          LengthLimitingTextInputFormatter(maxLenght),
+        ],
       ),
     );
   }

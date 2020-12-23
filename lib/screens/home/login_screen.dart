@@ -135,6 +135,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   MaterialPageRoute(builder: (context) => HomeScreen()));*/
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => DetailTalentScreen()));
+              /*print(DateTime.now());*/
             },
             padding: EdgeInsets.all(15.0),
             shape: RoundedRectangleBorder(
