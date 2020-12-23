@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:trocatalentos_app/widgets/tiles/configtile.dart';
 
 import 'config_perfil_screen.dart';
+import 'mytalents_screen.dart';
 
 class UserConfigScreen extends StatefulWidget {
   @override
@@ -85,6 +86,7 @@ class _UserConfigScreenState extends State<UserConfigScreen> {
                     ConfigTile(
                       icon: Icons.title,
                       text: 'Meus Talentos',
+                      page: MyTalentsScreen(),
                     ),
                     SizedBox(
                       height: 10.0,
