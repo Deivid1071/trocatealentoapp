@@ -1,6 +1,7 @@
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:trocatalentos_app/controllers/login_controller/login_controller.dart';
 import 'package:trocatalentos_app/model/user.dart';
+import 'package:trocatalentos_app/screens/search_talent_screen/detail_talent_screen.dart';
 import 'package:trocatalentos_app/services/auth_api_service.dart';
 import 'package:trocatalentos_app/utilities/constants.dart';
 import 'package:flutter/cupertino.dart';
@@ -109,7 +110,7 @@ class _LoginScreenState extends State<LoginScreen> {
           child: RaisedButton(
             elevation: 5.0,
             onPressed: () async {
-              if (loginController.isEmailValid) {
+              /*if (loginController.isEmailValid) {
                 loginController.loading = true;
                 await authApi.authorize(
                     loginController.email, loginController.password);
@@ -129,7 +130,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 setState(() {
                   errorTextField = true;
                 });
-              }
+              }*/
+              /*Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => HomeScreen()));*/
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => DetailTalentScreen()));
             },
             padding: EdgeInsets.all(15.0),
             shape: RoundedRectangleBorder(

@@ -68,7 +68,6 @@ class CustomDrawer extends StatelessWidget {
                                       fit: BoxFit.cover,
                                     )),
                               ),
-
                               Text(
                                 "Olá, Usuario",
                                 style: TextStyle(

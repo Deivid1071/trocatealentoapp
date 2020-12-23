@@ -1,8 +1,11 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+
+
 import 'package:trocatalentos_app/model/talent.dart';
 import 'package:trocatalentos_app/services/talent_api_service.dart';
+import 'package:flutter/material.dart';
 import 'package:trocatalentos_app/widgets/tiles/talent_tile.dart';
+
+import 'detail_talent_screen.dart';
 
 class SearchTalentScreen extends StatefulWidget {
   @override
@@ -50,11 +53,12 @@ class _SearchTalentScreenState extends State<SearchTalentScreen> {
                           search = _searchController.text;
                         });
                       },
-                        child: Icon(
-                      Icons.search,
-                      color: Theme.of(context).primaryColor,
-                          size: 30,
-                    ),),
+                      child: Icon(
+                        Icons.search,
+                        color: Theme.of(context).primaryColor,
+                        size: 30,
+                      ),
+                    ),
                     hintText: 'Busque um talento',
                     hintStyle: TextStyle(
                       fontSize: 14,
@@ -111,7 +115,6 @@ class _SearchTalentScreenState extends State<SearchTalentScreen> {
                     }
                     return Container();
                   }),
-              //_buildListSchedule('Resultado'),
             ],
           ),
         ),
