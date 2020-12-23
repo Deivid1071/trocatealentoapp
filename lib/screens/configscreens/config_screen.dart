@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:trocatalentos_app/widgets/tiles/configtile.dart';
 
+import 'config_perfil_screen.dart';
+
 class UserConfigScreen extends StatefulWidget {
   @override
   _UserConfigScreenState createState() => _UserConfigScreenState();
@@ -75,6 +77,7 @@ class _UserConfigScreenState extends State<UserConfigScreen> {
                     ConfigTile(
                       icon: Icons.person,
                       text: 'Dados pessoais',
+                      page: PerfilConfigScreen(),
                     ),
                     SizedBox(
                       height: 10.0,

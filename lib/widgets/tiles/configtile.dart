@@ -7,8 +7,9 @@ import 'package:trocatalentos_app/utilities/constants.dart';
 class ConfigTile extends StatelessWidget {
   final IconData  icon;
   final String text;
+  final Widget page;
 
-  const ConfigTile({Key key, this.icon, this.text}) : super(key: key);
+  const ConfigTile({Key key, this.icon, this.text, this.page}) : super(key: key);
 
 
   @override
@@ -23,7 +24,7 @@ class ConfigTile extends StatelessWidget {
           fontSize: 16
         ),),
         trailing: Icon(Icons.arrow_forward_ios, color: Colors.white,),
-        onTap: ()=> print('$text'),
+        onTap: page != null ? ()=> Navigator.push(context, MaterialPageRoute(builder: (context)=> page)) : null,
       ),
     );
   }

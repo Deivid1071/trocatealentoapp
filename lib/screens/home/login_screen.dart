@@ -131,11 +131,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   errorTextField = true;
                 });
               }*/
-              /*Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => HomeScreen()));*/
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => DetailTalentScreen()));
-              /*print(DateTime.now());*/
+                  MaterialPageRoute(builder: (context) => HomeScreen()));
+              /*Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => DetailTalentScreen()));*/
+
             },
             padding: EdgeInsets.all(15.0),
             shape: RoundedRectangleBorder(
