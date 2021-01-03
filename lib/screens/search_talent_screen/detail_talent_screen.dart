@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:trocatalentos_app/model/user.dart';
+import 'dart:convert';
+import 'package:trocatalentos_app/services/proposal_api_service.dart';
+import 'package:trocatalentos_app/services/talent_api_service.dart';
 import 'package:trocatalentos_app/widgets/custom_text_field.dart';
 import 'package:trocatalentos_app/widgets/customappbar.dart';
 
@@ -13,12 +17,24 @@ class _DetailTalentScreenState extends State<DetailTalentScreen> {
   bool isLoadingDialog = false;
   FixedExtentScrollController _horaController;
   FixedExtentScrollController _minController;
+  TalentApiService apiTalent;
+  ProposalApiService apiProposal;
 
   DateTime _dateTime;
   String stringDate;
   String stringHora;
   String stringMin;
   bool showPass;
+
+  @override
+  void initState() {
+    apiTalent = TalentApiService();
+    apiProposal = ProposalApiService();
+    stringHora = '00';
+    stringMin = '00';
+    _dateTime =  DateTime.now();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -361,6 +377,7 @@ class _DetailTalentScreenState extends State<DetailTalentScreen> {
                         itemExtent: 30,
                         looping: true,
                         onSelectedItemChanged: (int x) {
+                          x = x*15;
                           stringMin = x.toString();
                         },
                         children: List.generate(
@@ -417,9 +434,17 @@ class _DetailTalentScreenState extends State<DetailTalentScreen> {
                         onTap: () async {
                           setState(() {
                             isLoadingDialog = true;
-                            print('Enviar');
+
                           });
 
+                        String dateWithoutHour = stringDate = DateFormat("yyyy-MM-dd").format(_dateTime);
+
+                        String date = dateWithoutHour + ' ' + (stringHora.length <= 1 ? '0$stringHora' : stringHora) + ':' + (stringMin.length <= 1 ? '0$stringMin' : stringMin) + ':' + '00';
+                        String response = await apiProposal.createProposal(User.userId, date, 5);
+                          print(response);
+                          setState(() {
+                            isLoadingDialog = false;
+                          });
                         },
                         child: Container(
                           alignment: Alignment.center,

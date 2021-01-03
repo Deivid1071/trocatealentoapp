@@ -24,6 +24,8 @@ class _SearchTalentScreenState extends State<SearchTalentScreen> {
     super.initState();
   }
 
+
+
   Future<dynamic> futureBuilder;
 
   @override

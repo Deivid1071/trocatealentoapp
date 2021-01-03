@@ -1,6 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:trocatalentos_app/model/proposal.dart';
+import 'package:trocatalentos_app/model/schedule.dart';
+import 'package:trocatalentos_app/model/user.dart';
+import 'package:trocatalentos_app/screens/home/home_screen.dart';
+import 'package:trocatalentos_app/screens/schedules/schedules_screen.dart';
+import 'package:trocatalentos_app/services/proposal_api_service.dart';
+import 'package:trocatalentos_app/services/schedule_api_service.dart';
 
 class InviteTile extends StatefulWidget {
   final Proposal proposal;
@@ -16,11 +22,20 @@ class _InviteTileState extends State<InviteTile> {
   bool isLoadingDialog = false;
   FixedExtentScrollController _horaController;
   FixedExtentScrollController _minController;
+  ProposalApiService apiProposal;
+  ScheduleApiService apiSchedule;
 
   String stringDate;
   String stringHora;
   String stringMin;
   bool showPass;
+
+  @override
+  void initState() {
+    apiProposal = ProposalApiService();
+    apiSchedule = ScheduleApiService();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -310,6 +325,16 @@ class _InviteTileState extends State<InviteTile> {
                             print('Enviar');
                           });
 
+                          String response = await apiProposal.acceptProposal(widget.proposal.proposalId.toString());
+                          if(response == '200'){
+                            String responseSchedule = await apiSchedule.createSchedule(User.userId, widget.proposal.date);
+                            print(responseSchedule);
+                          }
+                          setState(() {
+                            isLoadingDialog = false;
+
+                          });
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> HomeScreen()));
                         },
                         child: Container(
                           alignment: Alignment.center,

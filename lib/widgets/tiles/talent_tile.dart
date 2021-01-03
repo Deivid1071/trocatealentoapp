@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:trocatalentos_app/model/talent.dart';
+import 'package:trocatalentos_app/screens/search_talent_screen/detail_talent_screen.dart';
 
 class TalentTile extends StatefulWidget {
   final Talent talent;
@@ -26,7 +27,8 @@ class _TalentTileState extends State<TalentTile> {
         color: Color(0xFF3CC9A4),
         child: InkWell(
           onTap: () {
-            print('Clicked');
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => DetailTalentScreen()));
           },
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

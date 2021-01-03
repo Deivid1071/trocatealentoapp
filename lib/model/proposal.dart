@@ -30,6 +30,8 @@ class ProposalResponse {
     });
     error = "";
   }
+
+
   ProposalResponse.withError(String errorValue)
       : result = null,//
         error = errorValue;

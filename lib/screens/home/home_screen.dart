@@ -9,6 +9,8 @@ import 'package:trocatalentos_app/widgets/customappbar.dart';
 class HomeScreen extends StatelessWidget {
 
   final _pageController = PageController();
+  int page;
+  HomeScreen({this.page});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,6 @@ class HomeScreen extends StatelessWidget {
           appBar: CustomAppBar(title: 'Inicio',).build(context),
           body: SearchTalentScreen(),
           drawer: CustomDrawer(_pageController),
-
         ),
         Scaffold(
           appBar: CustomAppBar(title: 'Agendamentos',).build(context),

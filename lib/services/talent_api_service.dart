@@ -14,7 +14,6 @@ class TalentApiService {
   String authToken = User.token.replaceAll('"', '').trim();
 
   Future<TalentResponse> getTalentBySearch(String search) async {
-
     try {
       final response = await http
           .get("$_baseUrl/talent/$search",
@@ -27,7 +26,7 @@ class TalentApiService {
           .timeout(const Duration(seconds: 10));
 
       print(response.statusCode);
-      print(json.decode(response.body));
+      //print(json.decode(response.body));
       switch (response.statusCode) {
         case 200:
           return TalentResponse.fromJson(json.decode(response.body));
@@ -65,7 +64,40 @@ class TalentApiService {
           .timeout(const Duration(seconds: 10));
 
       print(response.statusCode);
-      print(json.decode(response.body));
+      //print(json.decode(response.body));
+      switch (response.statusCode) {
+        case 200:
+          return TalentResponse.fromJsonToDetail(json.decode(response.body));
+          break;
+        case 400:
+          return TalentResponse.withError(json.decode(response.body));
+          break;
+        default:
+          return TalentResponse.withError(
+              "${response.statusCode}: ${response.body}");
+          break;
+      }
+    } on TimeoutException catch (e) {
+      return TalentResponse.withError("Tempo de conexão expirado, por favor tente novamente");
+    } catch (e) {
+      return TalentResponse.withError("ERROR: $e");
+    }
+  }
+
+  Future<TalentResponse> getTalentById(String id) async {
+    try {
+      final response = await http
+          .get("$_baseUrl/talent/$id",
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $authToken"
+        },
+      )
+          .timeout(const Duration(seconds: 10));
+
+      //print(response.statusCode);
+      //print(json.decode(response.body));
       switch (response.statusCode) {
         case 200:
           return TalentResponse.fromJsonToDetail(json.decode(response.body));

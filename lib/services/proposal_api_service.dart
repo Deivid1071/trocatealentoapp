@@ -46,5 +46,76 @@ class ProposalApiService {
     }
   }
 
+  Future<String> createProposal(String userTalentId, String date, int tcoin) async {
+    try {
+      final response = await http
+          .post("$_baseUrl/proposal",
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Accept': 'application/json',
+            "Authorization": "Bearer $authToken"
+          },
+          body: jsonEncode(<String, dynamic>{
+            'id_provider': userTalentId,
+            'id_contractor': User.userId,
+            'tcoin': tcoin,
+            'date': date,
+
+          }))
+          .timeout(const Duration(seconds: 10));
+
+      print(response.statusCode);
+      //print(json.decode(response.body));
+      switch (response.statusCode) {
+        case 200:
+          return '200';
+          break;
+        case 400:
+          return json.decode(response.body).toString();
+          break;
+        default:
+          return "${response.statusCode}: ${response.body}";
+          break;
+      }
+    } on TimeoutException catch (e) {
+      return "Tempo de conexão expirado, por favor tente novamente";
+    } catch (e) {
+      return "ERROR: $e";
+    }
+  }
+
+  Future<String> acceptProposal(String proposalId) async {
+    try {
+      final response = await http
+          .patch("$_baseUrl/accept/$proposalId",
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Accept': 'application/json',
+            "Authorization": "Bearer $authToken"
+          },
+          body: jsonEncode(<String, dynamic>{
+            'accepted': true,
+          }))
+          .timeout(const Duration(seconds: 10));
+
+      print(response.statusCode);
+      //print(json.decode(response.body));
+      switch (response.statusCode) {
+        case 200:
+          return '200';
+          break;
+        case 400:
+          return json.decode(response.body).toString();
+          break;
+        default:
+          return "${response.statusCode}: ${response.body}";
+          break;
+      }
+    } on TimeoutException catch (e) {
+      return "Tempo de conexão expirado, por favor tente novamente";
+    } catch (e) {
+      return "ERROR: $e";
+    }
+  }
 
 }
