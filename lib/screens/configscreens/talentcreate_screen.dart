@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:trocatalentos_app/services/talent_api_service.dart';
 import 'package:trocatalentos_app/widgets/customappbar.dart';
 import 'package:trocatalentos_app/widgets/sliders/tcoin_slider.dart';
+import 'package:trocatalentos_app/model/talent.dart';
 
 class CreateTalentScreen extends StatefulWidget {
   @override
@@ -13,11 +15,13 @@ class _CreateTalentScreenState extends State<CreateTalentScreen> {
   double rating;
   TextEditingController _tituloController;
   TextEditingController _descricaoController;
+  TalentApiService api;
 
   @override
   void initState() {
     _tituloController = TextEditingController();
     _descricaoController = TextEditingController();
+    api = TalentApiService();
     super.initState();
   }
 
@@ -199,7 +203,7 @@ class _CreateTalentScreenState extends State<CreateTalentScreen> {
               SliderCustomTcoin(
                 tittle: 'VALOR DO TALENTO',
                 listValues: ['T\$ 1', 'T\$ 10'],
-                value: rating??0,
+                value: rating??1,
                 range: 100.0,
                 onChanged: (value) {
                   setState(() {
@@ -220,7 +224,12 @@ class _CreateTalentScreenState extends State<CreateTalentScreen> {
           child: RaisedButton(
             elevation: 5.0,
             onPressed: () async {
-
+              TalentResponse response = await api.createTalent(_tituloController.text, _descricaoController.text);
+              if(response.resultDetailTalent.talentId != null){
+                print('salvou o talento');
+              }else{
+                print('não salvou o talento');
+              }
             },
             padding: EdgeInsets.all(15.0),
             shape: RoundedRectangleBorder(

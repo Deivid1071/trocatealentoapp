@@ -6,6 +6,10 @@ class Talent {
   String userEmail;
   int tcoin;
   String avatar;
+  String descricao;
+  String banner;
+  int avaliacao;
+
 
   Talent({
     this.talentId,
@@ -26,23 +30,38 @@ class Talent {
     tcoin = json['user']['tcoin'];
     avatar = json['user']['avatar'];
   }
+
+  Talent.fromJsonToDetail(Map<String, dynamic> json){
+    talentTitle = json['talent'];
+    banner = json['banner'];
+    avaliacao = json['rating'];
+    descricao = json['description'];
+    talentId = json['id'];
+    userTalentId = json['user'];
+  }
 }
 
 class TalentResponse {
-  List<Talent> result = [];
+  List<Talent> resultListTalents = [];
+  Talent resultDetailTalent;
   String error;
 
-  TalentResponse(this.result, this.error);
+  TalentResponse(this.resultListTalents, this.error, this.resultDetailTalent);
 
   TalentResponse.fromJson(List<dynamic> json) {
     json.forEach((value) {
-      result.add(Talent.fromJson(value));
+      resultListTalents.add(Talent.fromJson(value));
     });
     error = "";
   }
 
+  TalentResponse.fromJsonToDetail(Map<String, dynamic> json) {
+    resultDetailTalent = Talent.fromJsonToDetail(json);
+    error = "";
+  }
+
   TalentResponse.withError(String errorValue)
-      : result = null,
+      : resultListTalents = null,
         //
         error = errorValue;
 }

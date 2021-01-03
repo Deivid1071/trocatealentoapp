@@ -47,5 +47,43 @@ class TalentApiService {
     }
   }
 
+  Future<TalentResponse> createTalent(String titulo, String descricao) async {
+    try {
+      final response = await http
+          .post("$_baseUrl/talent",
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Accept': 'application/json',
+            "Authorization": "Bearer $authToken"
+          },
+          body: jsonEncode(<String, dynamic>{
+            'userId': User.userId,
+            'talent': titulo,
+            'description': descricao,
+
+          }))
+          .timeout(const Duration(seconds: 10));
+
+      print(response.statusCode);
+      print(json.decode(response.body));
+      switch (response.statusCode) {
+        case 200:
+          return TalentResponse.fromJsonToDetail(json.decode(response.body));
+          break;
+        case 400:
+          return TalentResponse.withError(json.decode(response.body));
+          break;
+        default:
+          return TalentResponse.withError(
+              "${response.statusCode}: ${response.body}");
+          break;
+      }
+    } on TimeoutException catch (e) {
+      return TalentResponse.withError("Tempo de conexão expirado, por favor tente novamente");
+    } catch (e) {
+      return TalentResponse.withError("ERROR: $e");
+    }
+  }
+
 
 }

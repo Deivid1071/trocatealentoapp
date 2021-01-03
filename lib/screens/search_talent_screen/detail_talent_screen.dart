@@ -168,7 +168,7 @@ class _DetailTalentScreenState extends State<DetailTalentScreen> {
                   color: Color(0xFF2F9C7F)),
             ),
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+              margin: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               child: Text(
                 "Uma breve descrição sobre seu talento de forma a facilitar as pessoas entenderem ao ler",
                 style: TextStyle(

@@ -110,7 +110,7 @@ class _LoginScreenState extends State<LoginScreen> {
           child: RaisedButton(
             elevation: 5.0,
             onPressed: () async {
-              /*if (loginController.isEmailValid) {
+              if (loginController.isEmailValid) {
                 loginController.loading = true;
                 await authApi.authorize(
                     loginController.email, loginController.password);
@@ -130,9 +130,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 setState(() {
                   errorTextField = true;
                 });
-              }*/
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => HomeScreen()));
+              }
+              /*Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => HomeScreen()));*/
               /*Navigator.push(context,
                   MaterialPageRoute(builder: (context) => DetailTalentScreen()));*/
 
