@@ -86,7 +86,7 @@ class _InviteTileState extends State<InviteTile> {
                 ],
               ),
               Text(
-                !widget.isSended ? 'Aceitar' : 'Confirmar',
+                !widget.isSended ? 'Ver detalhes' : 'Confirmar',
                 style: TextStyle(
                     fontSize: 16,
                     fontFamily: 'Nunito',

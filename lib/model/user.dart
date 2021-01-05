@@ -5,6 +5,8 @@ class User {
   static String name;
   static String email;
   static int tcoin;
+  static String image;
+  static String age;
 
 
   User.fromJson(Map<String, dynamic> json) {
@@ -13,6 +15,7 @@ class User {
     name = json['user']['username'];
     email = json['user']['email'];
     tcoin = json['user']['tcoin'];
+    image = json['user']['image'];
   }
 
 
@@ -22,6 +25,8 @@ class User {
     email = json['email'];
     tcoin = json['tcoin'];
   }
+
+
 
 }
 
@@ -38,6 +43,7 @@ class UserResponse {
   UserResponse.fromJsonRegister(Map<String, dynamic> json)
       : result = User.fromJsonRegister(json),
         error = "";
+
 
 
   UserResponse.withError(String errorValue)

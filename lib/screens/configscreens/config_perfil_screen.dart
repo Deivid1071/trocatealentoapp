@@ -2,6 +2,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'package:trocatalentos_app/model/user.dart';
+import 'package:trocatalentos_app/services/user_api_service.dart';
 import 'package:trocatalentos_app/widgets/custom_text_field.dart';
 import 'package:trocatalentos_app/widgets/customappbar.dart';
 import 'dart:io';
@@ -17,13 +19,15 @@ class _PerfilConfigScreenState extends State<PerfilConfigScreen> {
   TextEditingController _passwordController;
   TextEditingController _idadeController;
   File croppedFile;
+  UserApiService api;
 
   @override
   void initState() {
-    _emailController = TextEditingController();
-    _nameController = TextEditingController();
+    _emailController = TextEditingController(text: User.email);
+    _nameController = TextEditingController(text: User.name);
     _passwordController = TextEditingController();
-    _idadeController = TextEditingController();
+    _idadeController = TextEditingController(text: User.age);
+    api = UserApiService();
     super.initState();
   }
 
@@ -176,7 +180,11 @@ class _PerfilConfigScreenState extends State<PerfilConfigScreen> {
           child: RaisedButton(
             elevation: 5.0,
             onPressed: () async {
-              print('Atualizar');
+              String name = _nameController.text;
+              String email = _nameController.text;
+              String password = _nameController.text;
+              String age = _nameController.text;
+              String response = await api.updateUserPerfil(croppedFile, name, email, password, age);
             },
             padding: EdgeInsets.all(15.0),
             shape: RoundedRectangleBorder(
