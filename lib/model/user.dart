@@ -15,7 +15,7 @@ class User {
     name = json['user']['username'];
     email = json['user']['email'];
     tcoin = json['user']['tcoin'];
-    image = json['user']['image'];
+    image = json['user']['avatar'];
   }
 
 

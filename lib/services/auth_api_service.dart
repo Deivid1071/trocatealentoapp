@@ -58,6 +58,7 @@ class AuthorizationApiService {
             'username': name,
             'email': email,
             'password': password,
+            'age' : 0,
 
           }))
           .timeout(const Duration(seconds: 10));

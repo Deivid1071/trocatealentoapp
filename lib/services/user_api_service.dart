@@ -15,11 +15,11 @@ class UserApiService{
 
   Future  updateUserPerfil(File image, String name, String email, String password, String age) async {
     Dio dio = new Dio();
-    dio.options.headers['content-Type'] = 'application/json';
-    dio.options.headers["authorization"] = "token ${authToken}";
+    ///dio.options.headers['content-Type'] = 'multipart/form-data';
+    dio.options.headers["authorization"] = "Bearer ${authToken}";
     FormData data = FormData.fromMap({
-        "image": image != null ? await MultipartFile.fromFile(
-        image.path,) : null,
+        "file": image != null ? await MultipartFile.fromFile(
+        image.path) : null,
         "username": name,
         "email": email,
         "password": password,
@@ -27,7 +27,7 @@ class UserApiService{
     },);
     try {
       final response = await dio
-          .post("$_baseUrl/user", data: data)
+          .patch("$_baseUrl/user/${User.userId}", data: data)
           .timeout(const Duration(seconds: 10));
 
       print(response.statusCode);

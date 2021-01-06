@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:trocatalentos_app/model/user.dart';
 
 import 'package:trocatalentos_app/widgets/tiles/drawer_tile.dart';
+
+import '../config.dart';
 
 class CustomDrawer extends StatelessWidget {
   final PageController pageController;
@@ -63,13 +66,13 @@ class CustomDrawer extends StatelessWidget {
                                 width: 110,
                                 child: ClipRRect(
                                     borderRadius: BorderRadius.circular(100),
-                                    child: Image.asset(
+                                    child: User.image == null || User.image == '' ? Image.asset(
                                       'assets/images/avatar.png',
                                       fit: BoxFit.cover,
-                                    )),
+                                    ) : Image.network('${environment['baseUrl']}' + User.image),),
                               ),
                               Text(
-                                "Olá, Usuario",
+                                "Olá, ${User.name?? 'Usuário'}",
                                 style: TextStyle(
                                     fontSize: 18.0,
                                     fontWeight: FontWeight.bold,

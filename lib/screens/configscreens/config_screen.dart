@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:trocatalentos_app/model/user.dart';
+import 'package:trocatalentos_app/screens/home/login_screen.dart';
 import 'package:trocatalentos_app/widgets/tiles/configtile.dart';
 
 import 'config_perfil_screen.dart';
@@ -102,6 +104,34 @@ class _UserConfigScreenState extends State<UserConfigScreen> {
                       icon: Icons.featured_play_list,
                       text: 'Politicas e Privacidade',
                     ),
+                    SizedBox(
+                      height: 32,
+                    ),
+                    GestureDetector(
+                      onTap: (){
+                        User.userId = null;
+                        User.image = null;
+                        User.name = null;
+                        User.email = null;
+                        User.tcoin = null;
+                        User.token = null;
+                        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> LoginScreen()), (route) => false);
+                      },
+                      child: Container(
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            'Sair',
+                            style: TextStyle(
+                              fontFamily: 'Nunito',
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
                   ],
                 ),
               ),

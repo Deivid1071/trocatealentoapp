@@ -8,6 +8,8 @@ import 'package:trocatalentos_app/widgets/custom_text_field.dart';
 import 'package:trocatalentos_app/widgets/customappbar.dart';
 import 'dart:io';
 
+import '../../config.dart';
+
 class PerfilConfigScreen extends StatefulWidget {
   @override
   _PerfilConfigScreenState createState() => _PerfilConfigScreenState();
@@ -82,12 +84,14 @@ class _PerfilConfigScreenState extends State<PerfilConfigScreen> {
                                     ),
                                     child: ClipRRect(
                                         borderRadius: BorderRadius.circular(100),
-                                        child: croppedFile != null ? Image.file(croppedFile, fit: BoxFit.cover,) : Image.asset(
+                                        child: croppedFile != null ? Image.file(croppedFile, fit: BoxFit.cover,) : User.image == null || User.image == '' ? Image.asset(
                                           'assets/images/avatar.png',
                                           fit: BoxFit.cover,
-                                        )),
+                                        ) : Image.network('${environment['baseUrl']}' + User.image),
+                                      ),
+                                    ),
                                   ),
-                                ),
+
                                 Positioned(
                                   right: 20,
                                   bottom: 20,
@@ -105,7 +109,7 @@ class _PerfilConfigScreenState extends State<PerfilConfigScreen> {
                           ),
                         ),
                         Text(
-                          "User name",
+                          User.name ?? "User name",
                           style: TextStyle(
                               fontSize: 18.0,
                               fontWeight: FontWeight.bold,
@@ -155,6 +159,7 @@ class _PerfilConfigScreenState extends State<PerfilConfigScreen> {
                           height: 8,
                         ),
                         CustomTextField(
+                          obscure: true,
                           controller: _passwordController,
                           prefix: Icon(
                             Icons.vpn_key,
@@ -181,10 +186,11 @@ class _PerfilConfigScreenState extends State<PerfilConfigScreen> {
             elevation: 5.0,
             onPressed: () async {
               String name = _nameController.text;
-              String email = _nameController.text;
-              String password = _nameController.text;
-              String age = _nameController.text;
+              String email = _emailController.text;
+              String password = _passwordController.text;
+              String age = _idadeController.text;
               String response = await api.updateUserPerfil(croppedFile, name, email, password, age);
+              print(response);
             },
             padding: EdgeInsets.all(15.0),
             shape: RoundedRectangleBorder(
