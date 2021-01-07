@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:trocatalentos_app/model/user.dart';
 
 class CustomAppBar extends StatelessWidget {
   final String title;
@@ -11,6 +12,33 @@ class CustomAppBar extends StatelessWidget {
       iconTheme: IconThemeData(
         color: Colors.white,
       ),
+      actions: [
+        Row(
+          children: [
+            Text(
+              'Seu saldo',
+              style: TextStyle(
+                  fontFamily: 'Nunito',
+                  fontSize: 16.0, color: Colors.white),
+            ),
+            SizedBox(width: 16,),
+            Icon(
+              Icons.monetization_on,
+              color: Colors.white,
+              size: 20,
+            ),
+            Text(
+              User.tcoin.toString() ??'',
+              style: TextStyle(
+                  fontFamily: 'Nunito',
+                  fontSize: 16.0, color: Colors.white),
+            ),
+            SizedBox(
+              width: 24,
+            )
+          ],
+        ),
+      ],
       backgroundColor: Color(0xFF3CC9A4),
       elevation: 0,
       title: Text(title, style: TextStyle(
