@@ -5,6 +5,7 @@ import 'package:trocatalentos_app/model/user.dart';
 import 'package:trocatalentos_app/screens/home/login_screen.dart';
 import 'package:trocatalentos_app/widgets/tiles/configtile.dart';
 
+import '../../config.dart';
 import 'config_perfil_screen.dart';
 import 'mytalents_screen.dart';
 
@@ -57,12 +58,18 @@ class _UserConfigScreenState extends State<UserConfigScreen> {
                             margin: EdgeInsets.only(bottom: 10),
                             height: 110,
                             width: 110,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(100),
+                                border: Border.all(color: Colors.white, width: 2)
+                            ),
                             child: ClipRRect(
                                 borderRadius: BorderRadius.circular(100),
-                                child: Image.asset(
-                                  'assets/images/avatar.png',
-                                  fit: BoxFit.cover,
-                                )),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(100),
+                                  child: User.image == null || User.image == '' ? Image.asset(
+                                    'assets/images/avatar.png',
+                                    fit: BoxFit.cover,
+                                  ) : Image.network('${environment['baseUrl']}' +'/files/'+ User.image),),),
                           ),
                           Text(
                             "User name",

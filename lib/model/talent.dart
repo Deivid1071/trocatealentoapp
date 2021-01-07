@@ -27,7 +27,7 @@ class Talent {
     userTalentId = json['user']['id'];
     userName = json['user']['username'];
     userEmail = json['user']['email'];
-    tcoin = json['user']['tcoin'];
+    tcoin = json['tcoin'];
     avatar = json['user']['avatar'];
   }
 
@@ -37,7 +37,10 @@ class Talent {
     avaliacao = json['rating'];
     descricao = json['description'];
     talentId = json['id'];
-    userTalentId = json['user'];
+    tcoin = json['tcoin'] ;
+    userTalentId = json['user']['id'];
+    userName = json['user']['username'];
+    avatar = json['user']['avatar'];
   }
 }
 

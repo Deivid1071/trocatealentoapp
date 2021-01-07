@@ -3,7 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:trocatalentos_app/model/user.dart';
+import 'package:trocatalentos_app/screens/home/home_screen.dart';
 import 'package:trocatalentos_app/services/user_api_service.dart';
+import 'package:trocatalentos_app/widgets/custom_alertdialog.dart';
 import 'package:trocatalentos_app/widgets/custom_text_field.dart';
 import 'package:trocatalentos_app/widgets/customappbar.dart';
 import 'dart:io';
@@ -32,6 +34,7 @@ class _PerfilConfigScreenState extends State<PerfilConfigScreen> {
     api = UserApiService();
     super.initState();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +90,7 @@ class _PerfilConfigScreenState extends State<PerfilConfigScreen> {
                                         child: croppedFile != null ? Image.file(croppedFile, fit: BoxFit.cover,) : User.image == null || User.image == '' ? Image.asset(
                                           'assets/images/avatar.png',
                                           fit: BoxFit.cover,
-                                        ) : Image.network('${environment['baseUrl']}' + User.image),
+                                        ) : Image.network('${environment['baseUrl']}' +'/files/'+ User.image),
                                       ),
                                     ),
                                   ),
@@ -190,7 +193,13 @@ class _PerfilConfigScreenState extends State<PerfilConfigScreen> {
               String password = _passwordController.text;
               String age = _idadeController.text;
               String response = await api.updateUserPerfil(croppedFile, name, email, password, age);
-              print(response);
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return CustomAlertDialog(messageContent: response == '200' ? 'Informações salvas com sucesso.' : 'Erro ao salvar informações de perfil, por favor tente novamente.');
+                  },
+                ).then((value) => response == '200' ? Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => HomeScreen())): null );
             },
             padding: EdgeInsets.all(15.0),
             shape: RoundedRectangleBorder(

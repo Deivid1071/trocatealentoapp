@@ -122,7 +122,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
-                      return CustomAlertDialog();
+                      return CustomAlertDialog(messageContent: 'Erro ao efetuar o login, por favor tente novamente');
                     },
                   );
                 }

@@ -34,14 +34,15 @@ class UserApiService{
       //print(json.decode(response.body));
       switch (response.statusCode) {
         case 200:
-          return '${response.statusCode}';
+          User.image = '${response.data['avatar']}';
+          return '200';
           break;
         case 400:
           return '${response.statusCode}';
           break;
         default:
           return
-              "${response.statusCode}: ${response}";
+              "${response.statusCode}: ${response.data}";
           break;
       }
     } on TimeoutException catch (e) {

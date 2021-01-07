@@ -126,7 +126,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         SizedBox(height: 10.0),
         CustomTextField(
           prefix: Icon(
-            Icons.email,
+            Icons.person,
             color: Colors.white,
           ),
           hint: 'Digite seu nome',
@@ -188,7 +188,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           SizedBox(height: 10.0),
           CustomTextField(
             prefix: Icon(
-              Icons.email,
+              Icons.vpn_key,
               color: Colors.white,
             ),
             hint: 'Digite sua senha',
@@ -237,7 +237,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           SizedBox(height: 10.0),
           CustomTextField(
             prefix: Icon(
-              Icons.email,
+              Icons.vpn_key_outlined,
               color: Colors.white,
             ),
             hint: 'Digite sua senha',
@@ -302,7 +302,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    return CustomAlertDialog();
+                    return CustomAlertDialog(messageContent: 'Erro ao efetuar o login, por favor tente novamente');
                   },
                 );
               }

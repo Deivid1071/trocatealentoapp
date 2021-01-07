@@ -64,15 +64,20 @@ class CustomDrawer extends StatelessWidget {
                                 margin: EdgeInsets.only(bottom: 10),
                                 height: 110,
                                 width: 110,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(100),
+                                  border: Border.all(color: Colors.white, width: 2)
+                                ),
                                 child: ClipRRect(
                                     borderRadius: BorderRadius.circular(100),
                                     child: User.image == null || User.image == '' ? Image.asset(
                                       'assets/images/avatar.png',
                                       fit: BoxFit.cover,
-                                    ) : Image.network('${environment['baseUrl']}' + User.image),),
+                                    ) : Image.network('${environment['baseUrl']}' +'/files/'+ User.image),),
                               ),
                               Text(
                                 "Olá, ${User.name?? 'Usuário'}",
+                                textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontSize: 18.0,
                                     fontWeight: FontWeight.bold,

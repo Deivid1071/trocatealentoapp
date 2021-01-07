@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:trocatalentos_app/model/talent.dart';
 import 'package:trocatalentos_app/screens/search_talent_screen/detail_talent_screen.dart';
 
+import '../../config.dart';
+
 class TalentTile extends StatefulWidget {
   final Talent talent;
 
@@ -28,7 +30,7 @@ class _TalentTileState extends State<TalentTile> {
         child: InkWell(
           onTap: () {
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => DetailTalentScreen()));
+                MaterialPageRoute(builder: (context) => DetailTalentScreen(talentId: widget.talent.talentId)));
           },
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -44,13 +46,16 @@ class _TalentTileState extends State<TalentTile> {
                             margin: EdgeInsets.only(bottom: 10),
                             height: 85,
                             width: 85,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(100),
+                                border: Border.all(color: Colors.white, width: 2)
+                            ),
                             child: ClipRRect(
                                 borderRadius: BorderRadius.circular(100),
-                                child: Image.asset(
-                                  //widget.talent.avatar ??
-                                      'assets/images/avatar.png',
+                                child: widget.talent.avatar == null || widget.talent.avatar == '' ? Image.asset(
+                                  'assets/images/avatar.png',
                                   fit: BoxFit.cover,
-                                )),
+                                ) : Image.network('${environment['baseUrl']}' +'/files/'+ widget.talent.avatar),),
                           ),
                           Text(
                             widget.talent.userName??"",

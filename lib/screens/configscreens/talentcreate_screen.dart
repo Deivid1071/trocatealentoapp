@@ -1,10 +1,16 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:trocatalentos_app/model/user.dart';
+import 'dart:io';
 import 'package:trocatalentos_app/services/talent_api_service.dart';
 import 'package:trocatalentos_app/widgets/customappbar.dart';
 import 'package:trocatalentos_app/widgets/sliders/tcoin_slider.dart';
 import 'package:trocatalentos_app/model/talent.dart';
+
+import '../../config.dart';
 
 class CreateTalentScreen extends StatefulWidget {
   @override
@@ -16,6 +22,10 @@ class _CreateTalentScreenState extends State<CreateTalentScreen> {
   TextEditingController _tituloController;
   TextEditingController _descricaoController;
   TalentApiService api;
+  File croppedFile;
+  String banner;
+  String titulo;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -50,16 +60,24 @@ class _CreateTalentScreenState extends State<CreateTalentScreen> {
                   Container(
                     height: height * 0.3,
                     width: width,
-                    child: Image.network(
-                      'https://as2.ftcdn.net/jpg/03/17/72/91/500_F_317729175_qLGD76QRMxcuxB34HWvf0cnlr34IqGpW.jpg',
-                      fit: BoxFit.fitWidth,
-                    ),
+                    color: Colors.grey[200],
+                    child: croppedFile != null ? Image.file(croppedFile, fit: BoxFit.cover,) : banner != null && banner != '' ? Image.network('${environment['baseUrl']}' + banner) : Container(),
                   ),
                   Positioned(
+                    right: 30,
+                    bottom: 30,
+                    child: Container(
+                      height: 30,
+                      width: 30,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(32),
+                        color: Color(0xFF3CC9A4),
+                      ),
+                      child: Icon(Icons.edit,color: Colors.white, size: 20,),
+                    ),),
+                  Positioned(
                     child: GestureDetector(
-                      onTap: () {
-                        print('open images');
-                      },
+                      onTap: _pickImageFromGallery,
                       child: Container(
                         color: Colors.transparent,
                         height: height * 0.3,
@@ -71,7 +89,8 @@ class _CreateTalentScreenState extends State<CreateTalentScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "Titulo do Talento",
+                              titulo == null || titulo == '' ? "Titulo do Talento" : titulo,
+                              textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontFamily: 'Nunito',
                                 fontSize: 35.0,
@@ -108,6 +127,11 @@ class _CreateTalentScreenState extends State<CreateTalentScreen> {
                         color: Color(0xFF2F9C7F),
                         fontWeight: FontWeight.bold,
                       ),
+                      onChanged: (value){
+                        setState(() {
+                          titulo = value;
+                        });
+                      },
                       onSubmitted: (value) {
                         FocusScope.of(context).unfocus();
 
@@ -160,6 +184,7 @@ class _CreateTalentScreenState extends State<CreateTalentScreen> {
                   child: Center(
                     child: TextField(
                       textAlign: TextAlign.center,
+                      maxLines: 5,
                       style: TextStyle(
                           fontFamily: 'Nunito',
                           fontSize: 14.0,
@@ -224,8 +249,14 @@ class _CreateTalentScreenState extends State<CreateTalentScreen> {
           child: RaisedButton(
             elevation: 5.0,
             onPressed: () async {
-              TalentResponse response = await api.createTalent(_tituloController.text, _descricaoController.text);
-              if(response.resultDetailTalent.talentId != null){
+              setState(() {
+                isLoading = true;
+              });
+              String response = await api.createTalent(croppedFile, _tituloController.text, _descricaoController.text, rating.toString());
+              setState(() {
+                isLoading = false;
+              });
+              if(response == '200'){
                 print('salvou o talento');
               }else{
                 print('não salvou o talento');
@@ -236,7 +267,11 @@ class _CreateTalentScreenState extends State<CreateTalentScreen> {
               borderRadius: BorderRadius.circular(30.0),
             ),
             color: Color(0xFF2F9C7F),
-            child: Text(
+            child: isLoading
+                ? CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation(Colors.white),
+            )
+                : Text(
               'Salvar novo talento',
               style: TextStyle(
                 color: Colors.white,
@@ -251,6 +286,35 @@ class _CreateTalentScreenState extends State<CreateTalentScreen> {
       ),
     );
   }
+
+  Future _pickImageFromGallery() async {
+    FilePickerResult result = await FilePicker.platform.pickFiles(
+      allowMultiple: false,
+      type: FileType.custom,
+      allowedExtensions: ['jpg','jpeg'],
+    );
+    String path = result.files.first.path;
+    String name = result.files.first.name;
+    final croppedFileTemp = await imageSelected(File(path));
+    setState(() {
+      croppedFile = croppedFileTemp;
+    });
+
+  }
+
+  Future imageSelected(File image) async {
+    if (image != null) {
+      File imageCropped = await ImageCropper.cropImage(
+          sourcePath: image.path,
+          aspectRatio: CropAspectRatio(
+            ratioX: 1,
+            ratioY: 1,
+          ),
+          maxWidth: 200,
+          maxHeight: 200);
+      return imageCropped;
+    }
+  }
 }
 
 class UpperCaseTextFormatter extends TextInputFormatter {
@@ -262,4 +326,6 @@ class UpperCaseTextFormatter extends TextInputFormatter {
       selection: newValue.selection,
     );
   }
+
+
 }
