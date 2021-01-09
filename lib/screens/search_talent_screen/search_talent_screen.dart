@@ -1,6 +1,7 @@
 
 
 import 'package:trocatalentos_app/model/talent.dart';
+import 'package:trocatalentos_app/model/user.dart';
 import 'package:trocatalentos_app/services/talent_api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:trocatalentos_app/widgets/tiles/talent_tile.dart';
@@ -15,18 +16,22 @@ class SearchTalentScreen extends StatefulWidget {
 class _SearchTalentScreenState extends State<SearchTalentScreen> {
   TextEditingController _searchController;
   TalentApiService api;
-  String search = "";
+  String search='';
+  TalentResponse initialTalentsResponse;
 
   @override
   void initState() {
     _searchController = TextEditingController();
     api = TalentApiService();
+
+   // getInitialData();
     super.initState();
   }
 
+  getInitialData()async {
+    TalentResponse initialTalentsResponse = await api.getTalentBySearch();
+  }
 
-
-  Future<dynamic> futureBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +87,7 @@ class _SearchTalentScreenState extends State<SearchTalentScreen> {
                 height: 15,
               ),
               FutureBuilder(
-                  future: search.isNotEmpty && search != null ? api.getTalentBySearch(search) : null,
+                  future: api.getTalentBySearch(search: search),
                   builder: (context, snapshot) {
                     switch (snapshot.connectionState) {
                       case ConnectionState.none:
@@ -103,7 +108,6 @@ class _SearchTalentScreenState extends State<SearchTalentScreen> {
                             );
                           } else {
                             if (response.resultListTalents.isNotEmpty && response.resultListTalents != null) {
-                              print(response.resultListTalents);
                               return _buildListTalent('Resultado da busca', talentList: response.resultListTalents);
                             }else{
                               return Center(

@@ -84,6 +84,39 @@ class AuthorizationApiService {
     }
   }
 
+
+  Future<String> passwordRecovery(String email) async {
+    try {
+      final response = await http
+          .post("$_baseUrl/forgotPassword",
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Accept': 'application/json'
+          },
+          body: jsonEncode(<String, dynamic>{
+            'email': email,
+          }))
+          .timeout(const Duration(seconds: 10));
+
+      print(response.statusCode);
+      switch (response.statusCode) {
+        case 200:
+          return '${response.statusCode}';
+          break;
+        case 400:
+          return '${json.decode(response.body)}';
+          break;
+        default:
+          return "${response.statusCode}: ${response.body}";
+          break;
+      }
+    } on TimeoutException catch (e) {
+      return "Tempo de conexão expirado, por favor tente novamente";
+    } catch (e) {
+      return "ERROR: $e";
+    }
+  }
+
 /*crypto(String password, String email)  {
     final EncryptedSharedPreferences encryptedSharedPreferences =
     EncryptedSharedPreferences();

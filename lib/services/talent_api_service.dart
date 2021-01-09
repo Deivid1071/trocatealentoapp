@@ -13,10 +13,16 @@ class TalentApiService {
   final String _baseUrl = environment['baseUrl'];
   String authToken = User.token.replaceAll('"', '').trim();
 
-  Future<TalentResponse> getTalentBySearch(String search) async {
+  Future<TalentResponse> getTalentBySearch({String search}) async {
+    String url;
+    if(search == null || search == ''){
+      url = "$_baseUrl/talent";
+    }else{
+      url = "$_baseUrl/talent/$search";
+    }
     try {
       final response = await http
-          .get("$_baseUrl/talent/$search",
+          .get(url,
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
             'Accept': 'application/json',
@@ -30,44 +36,6 @@ class TalentApiService {
       switch (response.statusCode) {
         case 200:
           return TalentResponse.fromJson(json.decode(response.body));
-          break;
-        case 400:
-          return TalentResponse.withError(json.decode(response.body));
-          break;
-        default:
-          return TalentResponse.withError(
-              "${response.statusCode}: ${response.body}");
-          break;
-      }
-    } on TimeoutException catch (e) {
-      return TalentResponse.withError("Tempo de conexão expirado, por favor tente novamente");
-    } catch (e) {
-      return TalentResponse.withError("ERROR: $e");
-    }
-  }
-
-  Future<TalentResponse> createTalent345(String titulo, String descricao) async {
-    try {
-      final response = await http
-          .post("$_baseUrl/talent",
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-            'Accept': 'application/json',
-            "Authorization": "Bearer $authToken"
-          },
-          body: jsonEncode(<String, dynamic>{
-            'userId': User.userId,
-            'talent': titulo,
-            'description': descricao,
-
-          }))
-          .timeout(const Duration(seconds: 10));
-
-      print(response.statusCode);
-      //print(json.decode(response.body));
-      switch (response.statusCode) {
-        case 200:
-          return TalentResponse.fromJsonToDetail(json.decode(response.body));
           break;
         case 400:
           return TalentResponse.withError(json.decode(response.body));
@@ -139,6 +107,72 @@ class TalentApiService {
       switch (response.statusCode) {
         case 200:
           return TalentResponse.fromJsonToDetail(json.decode(response.body));
+          break;
+        case 400:
+          return TalentResponse.withError(json.decode(response.body));
+          break;
+        default:
+          return TalentResponse.withError(
+              "${response.statusCode}: ${response.body}");
+          break;
+      }
+    } on TimeoutException catch (e) {
+      return TalentResponse.withError("Tempo de conexão expirado, por favor tente novamente");
+    } catch (e) {
+      return TalentResponse.withError("ERROR: $e");
+    }
+  }
+
+  Future<TalentResponse> getInitialTalentList(String search) async {
+    try {
+      final response = await http
+          .get("$_baseUrl/talent",
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $authToken"
+        },
+      )
+          .timeout(const Duration(seconds: 10));
+
+      print(response.statusCode);
+      print(json.decode(response.body));
+      switch (response.statusCode) {
+        case 200:
+          return TalentResponse.fromJson(json.decode(response.body));
+          break;
+        case 400:
+          return TalentResponse.withError(json.decode(response.body));
+          break;
+        default:
+          return TalentResponse.withError(
+              "${response.statusCode}: ${response.body}");
+          break;
+      }
+    } on TimeoutException catch (e) {
+      return TalentResponse.withError("Tempo de conexão expirado, por favor tente novamente");
+    } catch (e) {
+      return TalentResponse.withError("ERROR: $e");
+    }
+  }
+
+  Future<TalentResponse> getMyTalents() async {
+    try {
+      final response = await http
+          .get("$_baseUrl/talent/${User.userId}",
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $authToken"
+        },
+      )
+          .timeout(const Duration(seconds: 10));
+
+      print(response.statusCode);
+      print(json.decode(response.body));
+      switch (response.statusCode) {
+        case 200:
+          return TalentResponse.fromJson(json.decode(response.body));
           break;
         case 400:
           return TalentResponse.withError(json.decode(response.body));

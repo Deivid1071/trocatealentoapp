@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:trocatalentos_app/model/talent.dart';
 import 'package:trocatalentos_app/screens/configscreens/talentcreate_screen.dart';
 import 'package:trocatalentos_app/screens/home/home_screen.dart';
+import 'package:trocatalentos_app/services/talent_api_service.dart';
 import 'package:trocatalentos_app/widgets/customappbar.dart';
+import 'package:trocatalentos_app/widgets/tiles/talent_tile.dart';
 
 class MyTalentsScreen extends StatefulWidget {
   @override
@@ -13,11 +16,18 @@ class _MyTalentsScreenState extends State<MyTalentsScreen> {
   bool isLoadingDialog = false;
   FixedExtentScrollController _horaController;
   FixedExtentScrollController _minController;
+  TalentApiService api;
 
   String stringDate;
   String stringHora;
   String stringMin;
   bool showPass;
+
+  @override
+  void initState() {
+    api = TalentApiService();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +38,41 @@ class _MyTalentsScreenState extends State<MyTalentsScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-
+            FutureBuilder(
+                future: api.getMyTalents(),
+                builder: (context, snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.none:
+                      break;
+                    case ConnectionState.waiting:
+                      return CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation(Color(0xFF2F9C7F)),
+                      );
+                      break;
+                    case ConnectionState.active:
+                      break;
+                    case ConnectionState.done:
+                      if (snapshot.hasData) {
+                        final TalentResponse response = snapshot.data;
+                        if (response.error.isNotEmpty) {
+                          return Center(
+                            child: Text(response.error),
+                          );
+                        } else {
+                          if (response.resultListTalents.isNotEmpty && response.resultListTalents != null) {
+                            return _buildListTalent(response.resultListTalents);
+                          }else{
+                            return Center(
+                              child: Text('Talento não encontrado.'),
+                            );
+                          }
+                        }
+                      }
+                      return Container();
+                      break;
+                  }
+                  return Container();
+                }),
           ],
         )
       ),
@@ -39,20 +83,7 @@ class _MyTalentsScreenState extends State<MyTalentsScreen> {
         child: RaisedButton(
           elevation: 5.0,
           onPressed: () async {
-            /*showDialog(
-                context: context,
-                barrierDismissible: true, // user must tap button!
-                builder: (BuildContext context) {
-                  return _dialogConfirmOrNot(
-                      "Você recebeu uma solicitação de agendamento \nEscolha uma data e hora para reagendar,\nescolha recusar essa solicitação\nou confirmar para confirmar um agendamento");
-                });*/
-            /*showDialog(
-                context: context,
-                barrierDismissible: true, // user must tap button!
-                builder: (BuildContext context) {
-                  return _dialogCancelProposal(
-                      "Você deseja cancelar a sua solicitação para\nTITULO DO TALENTO?");
-                });*/
+
             Navigator.of(context).push(MaterialPageRoute(builder: (context)=>CreateTalentScreen()));
           },
           padding: EdgeInsets.all(15.0),
@@ -72,6 +103,24 @@ class _MyTalentsScreenState extends State<MyTalentsScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  _buildListTalent(List<Talent> talentList) {
+    return Column(
+      children: [
+        Container(
+          height: MediaQuery.of(context).size.height - 90,
+          child: ListView.builder(
+            //physics: NeverScrollableScrollPhysics(),
+              itemCount: talentList.length,
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                Talent talent = talentList[index];
+                return TalentTile(talent);
+              }),
+        ),
+      ],
     );
   }
 

@@ -46,7 +46,7 @@ class ProposalApiService {
     }
   }
 
-  Future<String> createProposal(String userTalentId, String date, int tcoin) async {
+  Future<String> createProposal(String userTalentId, String date, int tcoin, int talentId) async {
     try {
       final response = await http
           .post("$_baseUrl/proposal",
@@ -58,6 +58,7 @@ class ProposalApiService {
           body: jsonEncode(<String, dynamic>{
             'id_provider': userTalentId,
             'id_contractor': User.userId,
+            'talentId': talentId,
             'tcoin': tcoin,
             'date': date,
 

@@ -28,6 +28,7 @@ class _DetailTalentScreenState extends State<DetailTalentScreen> {
   TalentApiService apiTalent;
   ProposalApiService apiProposal;
   Talent talent;
+  String responseMessage = '';
 
   DateTime _dateTime;
   String stringDate;
@@ -35,6 +36,7 @@ class _DetailTalentScreenState extends State<DetailTalentScreen> {
   String stringMin;
   bool showPass;
   bool isLoading = true;
+  bool doneRequest = false;
 
   @override
   void initState() {
@@ -458,7 +460,7 @@ class _DetailTalentScreenState extends State<DetailTalentScreen> {
                   height: 1,
                 ),
                 !isLoadingDialog
-                    ? IntrinsicHeight(
+                    ? !doneRequest ? IntrinsicHeight(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
@@ -503,11 +505,33 @@ class _DetailTalentScreenState extends State<DetailTalentScreen> {
                                     ':' +
                                     '00';
                                 String response = await apiProposal
-                                    .createProposal(User.userId, date, 5);
+                                    .createProposal(User.userId, date, talent.tcoin, talent.talentId);
                                 print(response);
-                                setState(() {
+                                setState(()  {
                                   isLoadingDialog = false;
+                                  doneRequest = true;
                                 });
+                                if(response == '200') {
+                                  setState(()  {
+                                    responseMessage = 'Solicitação enviada com sucesso.';
+                                  });
+                                  await Future.delayed(Duration(seconds: 4));
+                                  doneRequest = false;
+                                  Navigator.pop(context);
+                                }else{
+                                  setState(()  {
+                                    responseMessage = 'Falha ao enviar a solicitação.';
+                                  });
+                                  await Future.delayed(Duration(seconds: 4));
+                                  setState(()  {
+                                    responseMessage = 'Tente novamente';
+                                  });
+                                  await Future.delayed(Duration(seconds: 4));
+                                  setState(()  {
+                                    doneRequest = false;
+                                  });
+                                }
+
                               },
                               child: Container(
                                 alignment: Alignment.center,
@@ -526,14 +550,26 @@ class _DetailTalentScreenState extends State<DetailTalentScreen> {
                             ),
                           ],
                         ),
-                      )
-                    : Center(
+                      ) : Container(
+                  alignment: Alignment.center,
+                  color: Colors.transparent,
+                  height: 50,
+                  child: Text(
+                    responseMessage,
+                    style: TextStyle(
+                        fontFamily: 'Nunito',
+                        fontSize: 20,
+                        fontWeight: FontWeight.w100,
+                        color: Colors.white),
+                  ),
+                )
+                    :  Center(
                         child: Container(
                             margin: EdgeInsets.only(top: 10, bottom: 10),
                             height: 25,
                             child: CircularProgressIndicator(
                               valueColor: AlwaysStoppedAnimation(Colors.white),
-                            )),
+                            ),),
                       )
               ],
             ),

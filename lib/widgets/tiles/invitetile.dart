@@ -29,11 +29,21 @@ class _InviteTileState extends State<InviteTile> {
   String stringHora;
   String stringMin;
   bool showPass;
+  bool doneRequest = false;
+  String responseMessage = '';
+  DateTime dateProposal;
+  String hourProposal = '';
+  String minProposal = '';
 
   @override
   void initState() {
     apiProposal = ProposalApiService();
     apiSchedule = ScheduleApiService();
+    dateProposal = DateTime.parse(widget.proposal.date);
+    hourProposal = dateProposal.hour.toString();
+    minProposal = dateProposal.minute.toString();
+    print(hourProposal);
+    print(minProposal);
     super.initState();
   }
 
@@ -157,6 +167,7 @@ class _InviteTileState extends State<InviteTile> {
                       ),),
                     child: CupertinoDatePicker(
                       minimumDate: DateTime.now(),
+                      initialDateTime: dateProposal,
                       minuteInterval: 1,
                       maximumYear: 2021,
                       mode: CupertinoDatePickerMode.date,
@@ -204,7 +215,7 @@ class _InviteTileState extends State<InviteTile> {
                             String text = index < 10 ? '0$index' : '$index';
                             return Container(
                                 padding: EdgeInsets.only(top: 8),
-                                child: Text('$text',
+                                child: Text(text == '00' ? hourProposal.length < 2 ? '0$hourProposal' : '$hourProposal' : '$text',
                                     style: TextStyle(
                                         fontFamily: 'Nunito',
                                         fontSize: 15,
@@ -249,7 +260,7 @@ class _InviteTileState extends State<InviteTile> {
                             String text = min < 10 ? '0$min' : '$min';
                             return Container(
                                 padding: EdgeInsets.only(top: 8),
-                                child: Text('$text',
+                                child: Text(text == '00' ? minProposal.length < 2 ? '0$minProposal' : '$minProposal' : '$text',
                                     style: TextStyle(
                                         fontFamily: 'Nunito',
                                         fontSize: 15,
@@ -268,7 +279,7 @@ class _InviteTileState extends State<InviteTile> {
                   height: 1,
                 ),
                 !isLoadingDialog
-                    ? IntrinsicHeight(
+                    ? doneRequest ? IntrinsicHeight(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
@@ -324,17 +335,36 @@ class _InviteTileState extends State<InviteTile> {
                             isLoadingDialog = true;
                             print('Enviar');
                           });
-
                           String response = await apiProposal.acceptProposal(widget.proposal.proposalId.toString());
-                          if(response == '200'){
-                            String responseSchedule = await apiSchedule.createSchedule(User.userId, widget.proposal.date);
-                            print(responseSchedule);
-                          }
                           setState(() {
                             isLoadingDialog = false;
-
                           });
-                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> HomeScreen()));
+                          if(response == '200') {
+                            setState(()  {
+                              responseMessage = 'Solicitação aceita com sucesso.';
+                            });
+                            await Future.delayed(Duration(seconds: 4));
+                            doneRequest = false;
+                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> HomeScreen()));
+                          }else{
+                            setState(()  {
+                              responseMessage = 'Falha ao aceitar a solicitação.';
+                            });
+                            await Future.delayed(Duration(seconds: 4));
+                            setState(()  {
+                              responseMessage = 'Tente novamente';
+                            });
+                            await Future.delayed(Duration(seconds: 4));
+                            setState(()  {
+                              doneRequest = false;
+                            });
+                          }
+                          /*if(response == '200'){
+                            String responseSchedule = await apiSchedule.createSchedule(User.userId, widget.proposal.date);
+                            print(responseSchedule);
+                          }*/
+
+
                         },
                         child: Container(
                           alignment: Alignment.center,
@@ -353,6 +383,18 @@ class _InviteTileState extends State<InviteTile> {
                       ),
                     ],
                   ),
+                ) : Container(
+                  alignment: Alignment.center,
+                  color: Colors.transparent,
+                  height: 50,
+                  child: Text(
+                    responseMessage,
+                    style: TextStyle(
+                        fontFamily: 'Nunito',
+                        fontSize: 20,
+                        fontWeight: FontWeight.w100,
+                        color: Colors.white),
+                  ),
                 )
                     : Center(
                   child: Container(
@@ -360,7 +402,7 @@ class _InviteTileState extends State<InviteTile> {
                       height: 25,
                       child: CircularProgressIndicator(
                         valueColor: AlwaysStoppedAnimation(Colors.white),
-                      )),
+                      ),),
                 )
               ],
             ),
@@ -404,7 +446,7 @@ class _InviteTileState extends State<InviteTile> {
                   height: 1,
                 ),
                 !isLoadingDialog
-                    ? IntrinsicHeight(
+                    ? doneRequest ? IntrinsicHeight(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
@@ -432,6 +474,18 @@ class _InviteTileState extends State<InviteTile> {
                         ),
                       ),
                     ],
+                  ),
+                ) :  Container(
+                  alignment: Alignment.center,
+                  color: Colors.transparent,
+                  height: 50,
+                  child: Text(
+                    responseMessage,
+                    style: TextStyle(
+                        fontFamily: 'Nunito',
+                        fontSize: 20,
+                        fontWeight: FontWeight.w100,
+                        color: Colors.white),
                   ),
                 )
                     : Center(

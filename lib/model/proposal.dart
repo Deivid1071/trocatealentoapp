@@ -4,6 +4,8 @@ class Proposal {
   int tcoin;
   int proposalId;
   String date;
+  int talentId;
+  bool accepted;
 
   Proposal(this.providerId,this.contractorId, this.tcoin,this.proposalId,this.date);
 
@@ -13,8 +15,9 @@ class Proposal {
     tcoin = json['tcoin'];
     proposalId = json['id'];
     date = json['date'];
+    talentId = json['talentId'];
+    accepted = json['accepted'];
   }
-
 
 }
 

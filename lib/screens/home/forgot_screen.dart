@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:trocatalentos_app/services/auth_api_service.dart';
 import 'package:trocatalentos_app/utilities/constants.dart';
+import 'package:trocatalentos_app/widgets/custom_alertdialog.dart';
 import 'package:trocatalentos_app/widgets/custom_text_field.dart';
 
 class ForgotScreen extends StatefulWidget {
@@ -10,6 +12,9 @@ class ForgotScreen extends StatefulWidget {
 
 class _ForgotScreenState extends State<ForgotScreen> {
   bool _rememberMe = false;
+  TextEditingController _emailController = TextEditingController();
+  bool _emailIsValid = false;
+  AuthorizationApiService api = AuthorizationApiService();
 
   @override
   Widget build(BuildContext context) {
@@ -74,6 +79,21 @@ class _ForgotScreenState extends State<ForgotScreen> {
                         height: 25.0,
                       ),
                       _buildEmailTF(),
+                      !_emailIsValid
+                          ? Container(
+                        margin: EdgeInsets.only(top: 8),
+                        width: MediaQuery.of(context).size.width,
+                        child: Text(
+                          'Digite um e-mail válido',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontFamily: 'Nunito',
+                          ),
+                        ),
+                      )
+                          : Container(),
                       SizedBox(
                         height: 50.0,
                       ),
@@ -102,6 +122,10 @@ class _ForgotScreenState extends State<ForgotScreen> {
         ),
         SizedBox(height: 10.0),
         CustomTextField(
+          onChanged: (value){
+            _isEmailValid(value);
+          },
+          controller: _emailController,
           prefix: Icon(Icons.email, color: Colors.white,),
           hint: 'Digite seu e-mail',
           textInputType: TextInputType.emailAddress,
@@ -118,7 +142,20 @@ class _ForgotScreenState extends State<ForgotScreen> {
       width: double.infinity,
       child: RaisedButton(
         elevation: 5.0,
-        onPressed: () => print('Botão de cadastro pressionado'),
+        onPressed: () async {
+          if(_emailIsValid){
+            String response = await api.passwordRecovery(_emailController.text);
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return CustomAlertDialog(messageContent: response == 200 ? 'E-mail de recuperação de senha enviado com sucesso.' : 'Erro ao recuperar a senha, por favor tente novamente');
+              },
+            );
+            if (response == 200) {
+              _emailController.clear();
+            }
+          }
+        },
         padding: EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.0),
@@ -137,4 +174,11 @@ class _ForgotScreenState extends State<ForgotScreen> {
       ),
     );
   }
+   _isEmailValid(String email){
+     setState(() {
+       _emailIsValid = RegExp(r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$")
+           .hasMatch(email);
+     });
+  }
+
 }

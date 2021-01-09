@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:trocatalentos_app/model/user.dart';
+import 'package:trocatalentos_app/screens/configscreens/mytalents_screen.dart';
 import 'dart:io';
 import 'package:trocatalentos_app/services/talent_api_service.dart';
+import 'package:trocatalentos_app/widgets/custom_alertdialog.dart';
 import 'package:trocatalentos_app/widgets/customappbar.dart';
 import 'package:trocatalentos_app/widgets/sliders/tcoin_slider.dart';
 import 'package:trocatalentos_app/model/talent.dart';
@@ -256,11 +258,13 @@ class _CreateTalentScreenState extends State<CreateTalentScreen> {
               setState(() {
                 isLoading = false;
               });
-              if(response == '200'){
-                print('salvou o talento');
-              }else{
-                print('não salvou o talento');
-              }
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return CustomAlertDialog(messageContent: response == 200 ? 'Talento salvo com sucesso.' : 'Erro ao salvar talento, por favor tente novamente');
+                },
+              ).then((value) => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> MyTalentsScreen())));
+              
             },
             padding: EdgeInsets.all(15.0),
             shape: RoundedRectangleBorder(
