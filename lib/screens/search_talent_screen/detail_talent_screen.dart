@@ -111,6 +111,7 @@ class _DetailTalentScreenState extends State<DetailTalentScreen> {
                                 children: [
                                   Text(
                                     talent.talentTitle ?? "Titulo do Talento",
+                                    textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontFamily: 'Nunito',
                                       fontSize: 35.0,

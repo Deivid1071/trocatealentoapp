@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:trocatalentos_app/model/talent.dart';
+import 'package:trocatalentos_app/screens/configscreens/config_screen.dart';
 import 'package:trocatalentos_app/screens/configscreens/talentcreate_screen.dart';
 import 'package:trocatalentos_app/screens/home/home_screen.dart';
 import 'package:trocatalentos_app/services/talent_api_service.dart';
@@ -28,6 +29,7 @@ class _MyTalentsScreenState extends State<MyTalentsScreen> {
     api = TalentApiService();
     super.initState();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -112,12 +114,12 @@ class _MyTalentsScreenState extends State<MyTalentsScreen> {
         Container(
           height: MediaQuery.of(context).size.height - 90,
           child: ListView.builder(
-            //physics: NeverScrollableScrollPhysics(),
+            physics: NeverScrollableScrollPhysics(),
               itemCount: talentList.length,
               shrinkWrap: true,
               itemBuilder: (context, index) {
                 Talent talent = talentList[index];
-                return TalentTile(talent);
+                return TalentTile(talent, myTalent: true,);
               }),
         ),
       ],

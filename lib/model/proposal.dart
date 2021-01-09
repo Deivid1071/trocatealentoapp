@@ -5,7 +5,7 @@ class Proposal {
   int proposalId;
   String date;
   int talentId;
-  bool accepted;
+  String accepted;
 
   Proposal(this.providerId,this.contractorId, this.tcoin,this.proposalId,this.date);
 

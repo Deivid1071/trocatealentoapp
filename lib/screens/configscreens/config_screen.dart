@@ -72,7 +72,7 @@ class _UserConfigScreenState extends State<UserConfigScreen> {
                                   ) : Image.network('${environment['baseUrl']}' +'/files/'+ User.image),),),
                           ),
                           Text(
-                            "User name",
+                            User.name ?? "User name",
                             style: TextStyle(
                                 fontSize: 18.0,
                                 fontWeight: FontWeight.bold,

@@ -108,7 +108,7 @@ class _SearchTalentScreenState extends State<SearchTalentScreen> {
                             );
                           } else {
                             if (response.resultListTalents.isNotEmpty && response.resultListTalents != null) {
-                              return _buildListTalent('Resultado da busca', talentList: response.resultListTalents);
+                              return _buildListTalent(search.isNotEmpty ? 'Resultado da busca' : '', talentList: response.resultListTalents);
                             }else{
                               return Center(
                                 child: Text('Talento não encontrado.'),

@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:trocatalentos_app/model/user.dart';
 import 'package:trocatalentos_app/screens/configscreens/mytalents_screen.dart';
+import 'package:trocatalentos_app/screens/home/home_screen.dart';
 import 'dart:io';
 import 'package:trocatalentos_app/services/talent_api_service.dart';
 import 'package:trocatalentos_app/widgets/custom_alertdialog.dart';
@@ -15,12 +16,15 @@ import 'package:trocatalentos_app/model/talent.dart';
 import '../../config.dart';
 
 class CreateTalentScreen extends StatefulWidget {
+  final Talent talent;
+
+  CreateTalentScreen({this.talent});
   @override
   _CreateTalentScreenState createState() => _CreateTalentScreenState();
 }
 
 class _CreateTalentScreenState extends State<CreateTalentScreen> {
-  double rating;
+  double tcoin;
   TextEditingController _tituloController;
   TextEditingController _descricaoController;
   TalentApiService api;
@@ -28,12 +32,21 @@ class _CreateTalentScreenState extends State<CreateTalentScreen> {
   String banner;
   String titulo;
   bool isLoading = false;
+  bool isUpdate = false;
 
   @override
   void initState() {
     _tituloController = TextEditingController();
     _descricaoController = TextEditingController();
     api = TalentApiService();
+    if(widget.talent != null){
+      isUpdate = true;
+      banner = widget.talent.banner;
+      titulo = widget.talent.talentTitle;
+      _descricaoController = TextEditingController(text: widget.talent.descricao);
+      _tituloController = TextEditingController(text: widget.talent.talentTitle);
+      tcoin = widget.talent.tcoin.toDouble();
+    }
     super.initState();
   }
 
@@ -52,7 +65,7 @@ class _CreateTalentScreenState extends State<CreateTalentScreen> {
       },
       child: Scaffold(
         appBar: CustomAppBar(
-          title: 'Novo Talento',
+          title: isUpdate ? 'Atualizar Talento' : 'Novo Talento',
         ).build(context),
         body: SingleChildScrollView(
           child: Column(
@@ -63,7 +76,7 @@ class _CreateTalentScreenState extends State<CreateTalentScreen> {
                     height: height * 0.3,
                     width: width,
                     color: Colors.grey[200],
-                    child: croppedFile != null ? Image.file(croppedFile, fit: BoxFit.cover,) : banner != null && banner != '' ? Image.network('${environment['baseUrl']}' + banner) : Container(),
+                    child: croppedFile != null ? Image.file(croppedFile, fit: BoxFit.cover,) : banner != null && banner != '' ? Image.network('${environment['baseUrl']}' +'/files/'+ banner, fit: BoxFit.cover,) : Container(),
                   ),
                   Positioned(
                     right: 30,
@@ -230,11 +243,11 @@ class _CreateTalentScreenState extends State<CreateTalentScreen> {
               SliderCustomTcoin(
                 tittle: 'VALOR DO TALENTO',
                 listValues: ['T\$ 1', 'T\$ 10'],
-                value: rating??1,
+                value: tcoin??1,
                 range: 100.0,
                 onChanged: (value) {
                   setState(() {
-                    rating = value;
+                    tcoin = value;
                   });
                 },
               ),
@@ -251,19 +264,25 @@ class _CreateTalentScreenState extends State<CreateTalentScreen> {
           child: RaisedButton(
             elevation: 5.0,
             onPressed: () async {
+              String response;
               setState(() {
                 isLoading = true;
               });
-              String response = await api.createTalent(croppedFile, _tituloController.text, _descricaoController.text, rating.toString());
+              if(isUpdate){
+                response = await api.updateTalent(croppedFile, _tituloController.text, _descricaoController.text, tcoin.toInt(), widget.talent.talentId);
+              }else{
+                response = await api.createTalent(croppedFile, _tituloController.text, _descricaoController.text, tcoin.toString());
+              }
               setState(() {
                 isLoading = false;
               });
+              print('RESULTADO DA CHAMADA FOI: $response');
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return CustomAlertDialog(messageContent: response == 200 ? 'Talento salvo com sucesso.' : 'Erro ao salvar talento, por favor tente novamente');
+                  return CustomAlertDialog(messageContent: response == '200' ? 'Talento salvo com sucesso.' : 'Erro ao salvar talento, por favor tente novamente');
                 },
-              ).then((value) => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> MyTalentsScreen())));
+              ).then((value) => Navigator.push(context, MaterialPageRoute(builder: (context)=> HomeScreen())));
               
             },
             padding: EdgeInsets.all(15.0),
@@ -276,7 +295,7 @@ class _CreateTalentScreenState extends State<CreateTalentScreen> {
               valueColor: AlwaysStoppedAnimation(Colors.white),
             )
                 : Text(
-              'Salvar novo talento',
+              isUpdate ? 'Atualizar talento' : 'Salvar novo talento',
               style: TextStyle(
                 color: Colors.white,
                 letterSpacing: 1.5,

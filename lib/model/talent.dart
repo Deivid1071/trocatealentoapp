@@ -42,6 +42,7 @@ class Talent {
     userName = json['user']['username'];
     avatar = json['user']['avatar'];
   }
+
 }
 
 class TalentResponse {
@@ -62,6 +63,14 @@ class TalentResponse {
     resultDetailTalent = Talent.fromJsonToDetail(json);
     error = "";
   }
+
+  TalentResponse.fromJsonToMyTalents(List<dynamic> json) {
+    json.forEach((value) {
+      resultListTalents.add(Talent.fromJsonToDetail(value));
+    });
+    error = "";
+  }
+
 
   TalentResponse.withError(String errorValue)
       : resultListTalents = null,

@@ -85,7 +85,7 @@ class ProposalApiService {
     }
   }
 
-  Future<String> acceptProposal(String proposalId) async {
+  Future<String> acceptProposal(String proposalId, String acceptOrNot) async {
     try {
       final response = await http
           .patch("$_baseUrl/accept/$proposalId",
@@ -95,7 +95,7 @@ class ProposalApiService {
             "Authorization": "Bearer $authToken"
           },
           body: jsonEncode(<String, dynamic>{
-            'accepted': true,
+            'accepted': acceptOrNot,
           }))
           .timeout(const Duration(seconds: 10));
 

@@ -168,11 +168,11 @@ class _InviteTileState extends State<InviteTile> {
                     child: CupertinoDatePicker(
                       minimumDate: DateTime.now(),
                       initialDateTime: dateProposal,
+                      maximumDate: dateProposal,
                       minuteInterval: 1,
                       maximumYear: 2021,
                       mode: CupertinoDatePickerMode.date,
                       onDateTimeChanged: (DateTime dateTime) {
-
 
                       },
                     ),
@@ -201,29 +201,14 @@ class _InviteTileState extends State<InviteTile> {
                         ),
                         borderRadius: BorderRadius.all(Radius.circular(15)),
                       ),
-                      child: CupertinoPicker(
-                        key: ValueKey('hora'),
-                        scrollController: _horaController,
-                        itemExtent: 30,
-                        looping: true,
-                        onSelectedItemChanged: (int x) {
-                          stringHora = x.toString();
-                        },
-                        children: List.generate(
-                          24,
-                              (index) {
-                            String text = index < 10 ? '0$index' : '$index';
-                            return Container(
-                                padding: EdgeInsets.only(top: 8),
-                                child: Text(text == '00' ? hourProposal.length < 2 ? '0$hourProposal' : '$hourProposal' : '$text',
-                                    style: TextStyle(
-                                        fontFamily: 'Nunito',
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white)));
-                          },
-                        ),
-                      ),
+                      child: Container(
+                          alignment: Alignment.center,
+                          child: Text(hourProposal.length < 2 ? '0$hourProposal' : '$hourProposal',
+                              style: TextStyle(
+                                  fontFamily: 'Nunito',
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white))),
                     ),
                     Container(
                       height: 50,
@@ -245,30 +230,14 @@ class _InviteTileState extends State<InviteTile> {
                         ),
                         borderRadius: BorderRadius.all(Radius.circular(15)),
                       ),
-                      child: CupertinoPicker(
-                        key: ValueKey('min'),
-                        scrollController: _minController,
-                        itemExtent: 30,
-                        looping: true,
-                        onSelectedItemChanged: (int x) {
-                          stringMin = x.toString();
-                        },
-                        children: List.generate(
-                          4,
-                              (index) {
-                            int min = index * 15;
-                            String text = min < 10 ? '0$min' : '$min';
-                            return Container(
-                                padding: EdgeInsets.only(top: 8),
-                                child: Text(text == '00' ? minProposal.length < 2 ? '0$minProposal' : '$minProposal' : '$text',
-                                    style: TextStyle(
-                                        fontFamily: 'Nunito',
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white)));
-                          },
-                        ),
-                      ),
+                      child: Container(
+                        alignment: Alignment.center,
+                          child: Text(minProposal.length < 2 ? '0$minProposal' : '$minProposal',
+                              style: TextStyle(
+                                  fontFamily: 'Nunito',
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white))),
                     ),
                   ],
                 ),
@@ -279,13 +248,41 @@ class _InviteTileState extends State<InviteTile> {
                   height: 1,
                 ),
                 !isLoadingDialog
-                    ? doneRequest ? IntrinsicHeight(
+                    ? !doneRequest ? IntrinsicHeight(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       GestureDetector(
-                        onTap: () {
-                          Navigator.pop(context);
+                        onTap: () async {
+                          setState(() {
+                            isLoadingDialog = true;
+                            print('Enviar');
+                          });
+                          String response = await apiProposal.acceptProposal(widget.proposal.proposalId.toString(), 'N');
+                          setState(() {
+                            isLoadingDialog = false;
+                            doneRequest = true;
+                          });
+                          if(response == '200') {
+                            setState(()  {
+                              responseMessage = 'Solicitação recusada com sucesso.';
+                            });
+                            await Future.delayed(Duration(seconds: 4));
+                            doneRequest = false;
+                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> HomeScreen()));
+                          }else{
+                            setState(()  {
+                              responseMessage = 'Falha ao recusar a solicitação.';
+                            });
+                            await Future.delayed(Duration(seconds: 4));
+                            setState(()  {
+                              responseMessage = 'Tente novamente';
+                            });
+                            await Future.delayed(Duration(seconds: 4));
+                            setState(()  {
+                              doneRequest = false;
+                            });
+                          }
                         },
                         child: Container(
                           alignment: Alignment.center,
@@ -300,7 +297,7 @@ class _InviteTileState extends State<InviteTile> {
                           ),
                         ),
                       ),
-                      VerticalDivider(
+                      /*VerticalDivider(
                         color: Color(0xFF535252),
                       ),
                       GestureDetector(
@@ -325,7 +322,7 @@ class _InviteTileState extends State<InviteTile> {
                                 color: Colors.white),
                           ),
                         ),
-                      ),
+                      ),*/
                       VerticalDivider(
                         color: Color(0xFF535252),
                       ),
@@ -335,9 +332,10 @@ class _InviteTileState extends State<InviteTile> {
                             isLoadingDialog = true;
                             print('Enviar');
                           });
-                          String response = await apiProposal.acceptProposal(widget.proposal.proposalId.toString());
+                          String response = await apiProposal.acceptProposal(widget.proposal.proposalId.toString(), 'Y');
                           setState(() {
                             isLoadingDialog = false;
+                            doneRequest = true;
                           });
                           if(response == '200') {
                             setState(()  {
@@ -359,11 +357,6 @@ class _InviteTileState extends State<InviteTile> {
                               doneRequest = false;
                             });
                           }
-                          /*if(response == '200'){
-                            String responseSchedule = await apiSchedule.createSchedule(User.userId, widget.proposal.date);
-                            print(responseSchedule);
-                          }*/
-
 
                         },
                         child: Container(

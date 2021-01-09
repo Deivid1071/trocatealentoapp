@@ -159,7 +159,7 @@ class TalentApiService {
   Future<TalentResponse> getMyTalents() async {
     try {
       final response = await http
-          .get("$_baseUrl/talent/${User.userId}",
+          .get("$_baseUrl/talents/${User.userId}",
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Accept': 'application/json',
@@ -172,7 +172,7 @@ class TalentApiService {
       print(json.decode(response.body));
       switch (response.statusCode) {
         case 200:
-          return TalentResponse.fromJson(json.decode(response.body));
+          return TalentResponse.fromJsonToMyTalents(json.decode(response.body));
           break;
         case 400:
           return TalentResponse.withError(json.decode(response.body));
@@ -186,6 +186,43 @@ class TalentApiService {
       return TalentResponse.withError("Tempo de conexão expirado, por favor tente novamente");
     } catch (e) {
       return TalentResponse.withError("ERROR: $e");
+    }
+  }
+
+  Future updateTalent(File banner, String titulo, String descricao, int tcoin, int talentId) async {
+    Dio dio = new Dio();
+    ///dio.options.headers['content-Type'] = 'multipart/form-data';
+    dio.options.headers["authorization"] = "Bearer ${authToken}";
+    FormData data = FormData.fromMap({
+      "file": banner != null ? await MultipartFile.fromFile(
+          banner.path) : null,
+      "talent": titulo,
+      "description": descricao,
+      "tcoin": tcoin,
+    },);
+    try {
+      final response = await dio
+          .patch("$_baseUrl/talent/$talentId", data: data)
+          .timeout(const Duration(seconds: 10));
+
+      print(response.statusCode);
+      //print(json.decode(response.data));
+      switch (response.statusCode) {
+        case 200:
+          return '200';
+          break;
+        case 400:
+          return '${response.statusCode}';
+          break;
+        default:
+          return
+            "${response.statusCode}: ${response}";
+          break;
+      }
+    } on TimeoutException catch (e) {
+      return "Tempo de conexão expirado, por favor tente novamente";
+    } catch (e) {
+      return "ERROR: $e";
     }
   }
 

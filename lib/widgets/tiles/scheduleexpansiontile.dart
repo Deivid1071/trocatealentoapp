@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:trocatalentos_app/model/schedule.dart';
+import 'package:intl/intl.dart';
 
 class CustomExpansionTile extends StatefulWidget {
   final Schedule schedule;
@@ -11,7 +12,25 @@ class CustomExpansionTile extends StatefulWidget {
 }
 
 class _CustomExpansionTileState extends State<CustomExpansionTile> {
+
   bool isExpanded = false;
+  String date;
+  DateTime dateSchedule;
+  String daySchedule = '';
+  String monthSchedule = '';
+  String hourSchedule = '';
+  String minSchedule = '';
+
+  @override
+  void initState() {
+    dateSchedule = DateTime.parse(widget.schedule.date);
+    daySchedule = dateSchedule.day.toString();
+    monthSchedule = dateSchedule.month.toString();
+    hourSchedule = dateSchedule.hour.toString();
+    minSchedule = dateSchedule.minute.toString();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(      
@@ -26,7 +45,7 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
         ),
         child: ExpansionTile(
           title: Text(
-            "Agendamento em ${widget.schedule.date}",
+            "Agendamento em ${daySchedule.length < 2 ? '0$daySchedule' : '$daySchedule'}/${monthSchedule.length < 2 ? '0$monthSchedule' : '$monthSchedule'}",
             style: TextStyle(
               fontFamily: 'Nunito',
               fontWeight: FontWeight.bold,

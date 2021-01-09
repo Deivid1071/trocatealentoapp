@@ -1,20 +1,24 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:trocatalentos_app/model/talent.dart';
+import 'package:trocatalentos_app/screens/configscreens/talentcreate_screen.dart';
 import 'package:trocatalentos_app/screens/search_talent_screen/detail_talent_screen.dart';
 
 import '../../config.dart';
 
 class TalentTile extends StatefulWidget {
   final Talent talent;
+  final bool myTalent;
 
-  TalentTile(this.talent);
+  TalentTile(this.talent, {this.myTalent});
 
   @override
   _TalentTileState createState() => _TalentTileState();
 }
 
 class _TalentTileState extends State<TalentTile> {
+
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -29,8 +33,13 @@ class _TalentTileState extends State<TalentTile> {
         color: Color(0xFF3CC9A4),
         child: InkWell(
           onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => DetailTalentScreen(talentId: widget.talent.talentId)));
+            if(widget.myTalent != null){
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => CreateTalentScreen(talent: widget.talent)));
+            }else{
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => DetailTalentScreen(talentId: widget.talent.talentId)));
+            }
           },
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -73,13 +82,17 @@ class _TalentTileState extends State<TalentTile> {
                             Container(
                               height: 40,
                             ),
-                            Text(
-                              widget.talent.talentTitle,
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontFamily: 'Nunito',
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
+                            Container(
+                              width: MediaQuery.of(context).size.width*0.5,
+                              child: Text(
+                                widget.talent.talentTitle,
+                                textAlign: TextAlign.end,
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    fontFamily: 'Nunito',
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
                             ),
                             SizedBox(
                               height: 30,
