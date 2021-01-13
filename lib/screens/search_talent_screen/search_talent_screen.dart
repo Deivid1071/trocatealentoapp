@@ -2,8 +2,10 @@
 
 import 'package:trocatalentos_app/model/talent.dart';
 import 'package:trocatalentos_app/model/user.dart';
+import 'package:trocatalentos_app/services/notification_api_service.dart';
 import 'package:trocatalentos_app/services/talent_api_service.dart';
 import 'package:flutter/material.dart';
+import 'package:trocatalentos_app/widgets/notification/notification_dialog.dart';
 import 'package:trocatalentos_app/widgets/tiles/talent_tile.dart';
 
 import 'detail_talent_screen.dart';
@@ -16,20 +18,34 @@ class SearchTalentScreen extends StatefulWidget {
 class _SearchTalentScreenState extends State<SearchTalentScreen> {
   TextEditingController _searchController;
   TalentApiService api;
+  NotificationApiService apiNotification;
   String search='';
   TalentResponse initialTalentsResponse;
 
   @override
   void initState() {
-    _searchController = TextEditingController();
+    apiNotification = NotificationApiService();
     api = TalentApiService();
-
+    _searchController = TextEditingController();
+    _verifyNotifications();
    // getInitialData();
     super.initState();
   }
 
   getInitialData()async {
     TalentResponse initialTalentsResponse = await api.getTalentBySearch();
+  }
+
+  _verifyNotifications()async{
+    await apiNotification.getMyNotifications();
+    if(User.haveNotifications){
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return NotificationAlertDialog();
+        },
+      );
+    }
   }
 
 

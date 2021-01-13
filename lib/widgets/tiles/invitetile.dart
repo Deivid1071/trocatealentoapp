@@ -8,6 +8,8 @@ import 'package:trocatalentos_app/screens/schedules/schedules_screen.dart';
 import 'package:trocatalentos_app/services/proposal_api_service.dart';
 import 'package:trocatalentos_app/services/schedule_api_service.dart';
 
+import '../../config.dart';
+
 class InviteTile extends StatefulWidget {
   final Proposal proposal;
   final bool isSended;
@@ -33,6 +35,7 @@ class _InviteTileState extends State<InviteTile> {
   String responseMessage = '';
   DateTime dateProposal;
   String hourProposal = '';
+  int hourProposalInt = 0;
   String minProposal = '';
 
   @override
@@ -40,7 +43,8 @@ class _InviteTileState extends State<InviteTile> {
     apiProposal = ProposalApiService();
     apiSchedule = ScheduleApiService();
     dateProposal = DateTime.parse(widget.proposal.date);
-    hourProposal = dateProposal.hour.toString();
+    hourProposalInt = dateProposal.hour;
+    hourProposal = (hourProposalInt - 3).toString();
     minProposal = dateProposal.minute.toString();
     print(hourProposal);
     print(minProposal);
@@ -65,7 +69,7 @@ class _InviteTileState extends State<InviteTile> {
                 barrierDismissible: true, // user must tap button!
                 builder: (BuildContext context) {
                   return !widget.isSended  ? _dialogConfirmOrNot(
-                      "Você recebeu uma solicitação de agendamento \nescolha uma data e hora para reagendar\nescolha recusar essa solicitação\nou confirmar para confirmar um agendamento"): _dialogCancelProposal(
+                      "Você recebeu uma solicitação de agendamento \nescolha recusar essa solicitação\nou confirmar para confirmar um agendamento"): _dialogCancelProposal(
                       "Você deseja cancelar a sua solicitação para\nTITULO DO TALENTO?");
                 });
           },
@@ -78,15 +82,19 @@ class _InviteTileState extends State<InviteTile> {
                     margin: EdgeInsets.only(bottom: 10),
                     height: 55,
                     width: 55,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(100),
+                        border: Border.all(color: Colors.white, width: 2)
+                    ),
                     child: ClipRRect(
                         borderRadius: BorderRadius.circular(100),
-                        child: Image.asset(
+                        child: widget.proposal.providerAvatar == null || widget.proposal.providerAvatar == '' ? Image.asset(
                           'assets/images/avatar.png',
                           fit: BoxFit.cover,
-                        )),
+                        ) : Image.network('${environment['baseUrl']}' +'/files/'+ widget.proposal.providerAvatar),),
                   ),
                   Text(
-                    'Nome',
+                    widget.proposal.providerName ?? '',
                     style: TextStyle(
                         fontSize: 14,
                         fontFamily: 'Nunito',

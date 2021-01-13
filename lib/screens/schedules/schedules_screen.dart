@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:trocatalentos_app/model/proposal.dart';
 import 'package:trocatalentos_app/model/schedule.dart';
+import 'package:trocatalentos_app/model/user.dart';
 import 'package:trocatalentos_app/services/proposal_api_service.dart';
 import 'package:trocatalentos_app/services/schedule_api_service.dart';
 import 'package:trocatalentos_app/widgets/tiles/invitetile.dart';
@@ -20,6 +21,7 @@ class _SchedulesScreenState extends State<SchedulesScreen> {
   void initState() {
     proposalApi = ProposalApiService();
     scheduleApi = ScheduleApiService();
+    User.haveNotifications = false;
     super.initState();
   }
 

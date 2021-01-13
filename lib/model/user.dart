@@ -1,4 +1,6 @@
 
+import 'package:trocatalentos_app/model/schedule.dart';
+
 class User {
   static String userId;
   static String token;
@@ -7,6 +9,9 @@ class User {
   static int tcoin;
   static String image;
   static String age;
+  static int qtsNewProposals;
+  static bool haveNotifications = false;
+  static Schedule lastSchedulefinished;
 
 
   User.fromJson(Map<String, dynamic> json) {
