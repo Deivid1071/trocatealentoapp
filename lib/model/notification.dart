@@ -27,6 +27,15 @@ class Notification {
     if(User.qtsNewProposals > 0 || User.lastSchedulefinished != null){
       User.haveNotifications = true;
     }
+    List canceledListJson = json['canceled'];
+    if(canceledListJson.length > 0){
+      User.canceled = true;
+      canceledListJson.forEach((value) {
+        User.scheduleListCanceled.add(CanceledSchedule.fromJson(value));
+      });
+    }else{
+      User.canceled = false;
+    }
   }
 }
 
@@ -45,4 +54,17 @@ class NotificationResponse {
       : result = null,
   //
         error = errorValue;
+}
+
+class CanceledSchedule{
+  DateTime talentCanceledDate;
+  String talentCanceledName;
+
+  CanceledSchedule({this.talentCanceledDate, this.talentCanceledName});
+
+  CanceledSchedule.fromJson(Map<String, dynamic> json){
+    talentCanceledDate = DateTime.parse(json['date']);
+    talentCanceledName = json['talent']['talent'];
+  }
+
 }

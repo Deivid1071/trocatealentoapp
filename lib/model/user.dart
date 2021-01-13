@@ -1,6 +1,8 @@
 
 import 'package:trocatalentos_app/model/schedule.dart';
 
+import 'notification.dart';
+
 class User {
   static String userId;
   static String token;
@@ -12,6 +14,9 @@ class User {
   static int qtsNewProposals;
   static bool haveNotifications = false;
   static Schedule lastSchedulefinished;
+  static bool canceled = false;
+  static List<CanceledSchedule> scheduleListCanceled;
+
 
 
   User.fromJson(Map<String, dynamic> json) {
@@ -55,3 +60,4 @@ class UserResponse {
       : result = null,//
         error = errorValue;
 }
+

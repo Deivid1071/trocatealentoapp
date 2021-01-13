@@ -13,7 +13,6 @@ class ScheduleApiService {
   String authToken = User.token.replaceAll('"', '').trim();
 
   Future<ScheduleResponse> getScheduleData() async {
-
     try {
       final response = await http
           .get("$_baseUrl/schedules/${User.userId}",
@@ -68,6 +67,38 @@ class ScheduleApiService {
       switch (response.statusCode) {
         case 200:
           return '200';
+          break;
+        case 400:
+          return json.decode(response.body).toString();
+          break;
+        default:
+          return "${response.statusCode}: ${response.body}";
+          break;
+      }
+    } on TimeoutException catch (e) {
+      return "Tempo de conexão expirado, por favor tente novamente";
+    } catch (e) {
+      return "ERROR: $e";
+    }
+  }
+
+  Future<String> deleteScheduleData(int scheduleId) async {
+    try {
+      final response = await http
+          .delete("$_baseUrl/schedule/$scheduleId",
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $authToken"
+        },
+      )
+          .timeout(const Duration(seconds: 10));
+
+      print(response.statusCode);
+      print(json.decode(response.body));
+      switch (response.statusCode) {
+        case 200:
+          return response.statusCode.toString();
           break;
         case 400:
           return json.decode(response.body).toString();

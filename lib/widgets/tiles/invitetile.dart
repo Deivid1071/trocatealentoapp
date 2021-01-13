@@ -37,6 +37,7 @@ class _InviteTileState extends State<InviteTile> {
   String hourProposal = '';
   int hourProposalInt = 0;
   String minProposal = '';
+  int compareDate;
 
   @override
   void initState() {
@@ -48,6 +49,7 @@ class _InviteTileState extends State<InviteTile> {
     minProposal = dateProposal.minute.toString();
     print(hourProposal);
     print(minProposal);
+    compareDate = DateTime.now().compareTo(dateProposal);
     super.initState();
   }
 
@@ -174,7 +176,7 @@ class _InviteTileState extends State<InviteTile> {
                         ),
                       ),),
                     child: CupertinoDatePicker(
-                      minimumDate: DateTime.now(),
+                      minimumDate: compareDate != (-1) ? dateProposal : DateTime.now(),
                       initialDateTime: dateProposal,
                       maximumDate: dateProposal,
                       minuteInterval: 1,
@@ -455,8 +457,32 @@ class _InviteTileState extends State<InviteTile> {
                         onTap: () async {
                           setState(() {
                             isLoadingDialog = true;
-                            print('Enviar');
                           });
+                          String response = await apiProposal.acceptProposal(widget.proposal.proposalId.toString(), 'N');
+                          setState(() {
+                            isLoadingDialog = false;
+                            doneRequest = true;
+                          });
+                          if(response == '200') {
+                            setState(()  {
+                              responseMessage = 'Solicitação recusada com sucesso.';
+                            });
+                            await Future.delayed(Duration(seconds: 4));
+                            doneRequest = false;
+                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> HomeScreen()));
+                          }else{
+                            setState(()  {
+                              responseMessage = 'Falha ao recusar a solicitação.';
+                            });
+                            await Future.delayed(Duration(seconds: 4));
+                            setState(()  {
+                              responseMessage = 'Tente novamente';
+                            });
+                            await Future.delayed(Duration(seconds: 4));
+                            setState(()  {
+                              doneRequest = false;
+                            });
+                          }
 
                         },
                         child: Container(

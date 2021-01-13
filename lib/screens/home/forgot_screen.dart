@@ -148,7 +148,7 @@ class _ForgotScreenState extends State<ForgotScreen> {
             showDialog(
               context: context,
               builder: (BuildContext context) {
-                return CustomAlertDialog(messageContent: response == 200 ? 'E-mail de recuperação de senha enviado com sucesso.' : 'Erro ao recuperar a senha, por favor tente novamente');
+                return CustomAlertDialog(messageContent: response == '200' ? 'E-mail de recuperação de senha enviado com sucesso.' : 'Erro ao recuperar a senha, por favor tente novamente');
               },
             );
             if (response == 200) {

@@ -2,9 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:trocatalentos_app/model/schedule.dart';
+import 'package:trocatalentos_app/screens/home/home_screen.dart';
+import 'package:trocatalentos_app/services/schedule_api_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../config.dart';
+import '../custom_alertdialog.dart';
 
 
 class CustomExpansionTile extends StatefulWidget {
@@ -25,6 +28,10 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
   String hourSchedule = '';
   String minSchedule = '';
   TextEditingController _messageController = TextEditingController();
+  bool doneRequest = false;
+  String responseMessage = '';
+  bool isLoadingDialog = false;
+  ScheduleApiService api;
 
   @override
   void initState() {
@@ -33,6 +40,7 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
     monthSchedule = dateSchedule.month.toString();
     hourSchedule = dateSchedule.hour.toString();
     minSchedule = dateSchedule.minute.toString();
+    api = ScheduleApiService();
     super.initState();
   }
 
@@ -159,6 +167,22 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
                       ),
                     ),
                     GestureDetector(
+                      onTap: ()async {
+                        String response = await api.deleteScheduleData(
+                            widget.schedule.scheduleId);
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return CustomAlertDialog(
+                                messageContent: response == '200'
+                                    ? 'Agendamento cancelado com sucesso.'
+                                    : 'Falha ao cancelar o agendamento, por favor tente novamente');
+                          },
+                        ).then((value) =>
+                            Navigator.pushReplacement(
+                                context, MaterialPageRoute(
+                                builder: (context) => HomeScreen())));
+                      },
                       child: Container(
                         margin: const EdgeInsets.only(top: 16),
                         width: 170,
@@ -212,6 +236,8 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
       ),
     );
   }
+
+
 
   _dialogSendEmail(){
     return StatefulBuilder(
