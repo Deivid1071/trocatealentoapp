@@ -16,9 +16,9 @@ class TalentApiService {
   Future<TalentResponse> getTalentBySearch({String search}) async {
     String url;
     if(search == null || search == ''){
-      url = "$_baseUrl/talent";
+      url = "$_baseUrl/talent/${User.userId}";
     }else{
-      url = "$_baseUrl/talent/$search";
+      url = "$_baseUrl/talent/${User.userId}/$search";
     }
     try {
       final response = await http
@@ -223,6 +223,41 @@ class TalentApiService {
       return "Tempo de conexão expirado, por favor tente novamente";
     } catch (e) {
       return "ERROR: $e";
+    }
+  }
+
+  Future deleteTalentById(int id) async {
+    try {
+      final response = await http
+          .delete("$_baseUrl/talent/$id",
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $authToken"
+        },
+      )
+          .timeout(const Duration(seconds: 10));
+
+      //print(response.statusCode);
+      print(json.decode(response.body));
+      switch (response.statusCode) {
+        case 200:
+          return response.statusCode.toString();
+          break;
+        case 400:
+          return response.statusCode.toString();
+          break;
+        case 409:
+          return json.decode(response.body)['message'].toString();
+          break;
+        default:
+          return "${response.statusCode}: ${response.body}";
+          break;
+      }
+    } on TimeoutException catch (e) {
+      return TalentResponse.withError("Tempo de conexão expirado, por favor tente novamente");
+    } catch (e) {
+      return TalentResponse.withError("ERROR: $e");
     }
   }
 

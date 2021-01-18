@@ -258,53 +258,100 @@ class _CreateTalentScreenState extends State<CreateTalentScreen> {
           ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: MediaQuery.of(context).viewInsets.bottom == 0 ? Container(
-          margin: EdgeInsets.symmetric(horizontal: 16),
-          width: double.infinity,
-          child: RaisedButton(
-            elevation: 5.0,
-            onPressed: () async {
-              String response;
-              setState(() {
-                isLoading = true;
-              });
-              if(isUpdate){
-                response = await api.updateTalent(croppedFile, _tituloController.text, _descricaoController.text, tcoin.toInt(), widget.talent.talentId);
-              }else{
-                response = await api.createTalent(croppedFile, _tituloController.text, _descricaoController.text, tcoin.toString());
-              }
-              setState(() {
-                isLoading = false;
-              });
-              print('RESULTADO DA CHAMADA FOI: $response');
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return CustomAlertDialog(messageContent: response == '200' ? 'Talento salvo com sucesso.' : 'Erro ao salvar talento, por favor tente novamente');
+        floatingActionButton: MediaQuery.of(context).viewInsets.bottom == 0 ? Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            isUpdate ? Container(
+              margin: EdgeInsets.symmetric(horizontal: 16),
+              width: 60,
+              child: RaisedButton(
+                elevation: 5.0,
+                onPressed: () async {
+                  String response;
+                  setState(() {
+                    isLoading = true;
+                  });
+                  if(isUpdate){
+                    response = await api.deleteTalentById(widget.talent.talentId);
+                  }
+                  setState(() {
+                    isLoading = false;
+                  });
+                  print('RESULTADO DA CHAMADA FOI: $response');
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return CustomAlertDialog(messageContent: response == '200' ? 'Talento deletado com sucesso.' : response);
+                    },
+                  ).then((value) => Navigator.push(context, MaterialPageRoute(builder: (context)=> HomeScreen())));
+
                 },
-              ).then((value) => Navigator.push(context, MaterialPageRoute(builder: (context)=> HomeScreen())));
-              
-            },
-            padding: EdgeInsets.all(15.0),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30.0),
-            ),
-            color: Color(0xFF2F9C7F),
-            child: isLoading
-                ? CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation(Colors.white),
-            )
-                : Text(
-              isUpdate ? 'Atualizar talento' : 'Salvar novo talento',
-              style: TextStyle(
-                color: Colors.white,
-                letterSpacing: 1.5,
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Nunito',
+                padding: EdgeInsets.all(15.0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(100.0),
+                ),
+                color: Color(0xFF2F9C7F),
+                child: isLoading
+                    ? CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation(Colors.white),
+                )
+                    : Icon(Icons.delete_outline, color: Colors.white,),
+              ),
+            ) : Container(),
+            isUpdate ? SizedBox(height: 8,) : Container(),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 16),
+              width:  MediaQuery.of(context).size.width* (isUpdate ? 0.6 : 0.9),
+              child: RaisedButton(
+                elevation: 5.0,
+                onPressed: () async {
+                  String response;
+                  setState(() {
+                    isLoading = true;
+                  });
+                  if(isUpdate){
+                    response = await api.updateTalent(croppedFile, _tituloController.text, _descricaoController.text, tcoin.toInt(), widget.talent.talentId);
+                  }else{
+                    response = await api.createTalent(croppedFile, _tituloController.text, _descricaoController.text, tcoin.toString());
+                  }
+                  setState(() {
+                    isLoading = false;
+                  });
+                  print('RESULTADO DA CHAMADA FOI: $response');
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return CustomAlertDialog(messageContent: response == '200' ? 'Talento salvo com sucesso.' : 'Erro ao salvar talento, por favor tente novamente');
+                    },
+                  ).then((value) => Navigator.push(context, MaterialPageRoute(builder: (context)=> HomeScreen())));
+
+                },
+                padding: EdgeInsets.all(15.0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+                color: Color(0xFF2F9C7F),
+                child: isLoading
+                    ? CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation(Colors.white),
+                )
+                    : Text(
+                  isUpdate ? 'Atualizar talento' : 'Salvar novo talento',
+                  style: TextStyle(
+                    color: Colors.white,
+                    letterSpacing: 1.5,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Nunito',
+                  ),
+                ),
               ),
             ),
-          ),
+
+
+          ],
         ): Container(),
       ),
     );
