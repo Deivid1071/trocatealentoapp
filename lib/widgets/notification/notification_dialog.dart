@@ -58,7 +58,7 @@ class _NotificationAlertDialogState extends State<NotificationAlertDialog> {
                 SizedBox(
                   height: 16,
                 ),
-                User.lastSchedulefinished != null && User.haveNotifications
+                User.lastSchedulefinished != null
                     ? Container(
                         margin: EdgeInsets.only(
                             left: 8, bottom: 8, right: 8, top: 16),
@@ -73,7 +73,7 @@ class _NotificationAlertDialogState extends State<NotificationAlertDialog> {
                         ),
                       )
                     : Container(),
-                User.lastSchedulefinished != null && User.haveNotifications
+                User.lastSchedulefinished != null
                     ? Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -148,7 +148,7 @@ class _NotificationAlertDialogState extends State<NotificationAlertDialog> {
                 User.canceled && User.haveNotifications ? Container(
                   margin: EdgeInsets.only(
                       left: 8, bottom: 8, right: 8, top: 16),
-                  child: Text(
+                  child: User.scheduleListCanceled != null ? Text(
                     'Agendamentos cancelados : ${User.scheduleListCanceled.length} ',
                     textAlign: TextAlign.center,
                     style: TextStyle(
@@ -156,9 +156,9 @@ class _NotificationAlertDialogState extends State<NotificationAlertDialog> {
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
                         color: Colors.white),
-                  ),
+                  ) : Container(),
                 ) : Container(),
-                User.canceled && User.haveNotifications ? Column(
+                User.canceled && User.haveNotifications ? User.scheduleListCanceled != null ? Column(
                   children: User.scheduleListCanceled.map((e) {
 
                     return Text(e.talentCanceledName + '   ' + e.talentCanceledDate.day.toString() +'/'+ e.talentCanceledDate.month.toString(), style: TextStyle(
@@ -167,7 +167,7 @@ class _NotificationAlertDialogState extends State<NotificationAlertDialog> {
                         fontWeight: FontWeight.bold,
                         color: Colors.white),);
                   }).toList(),
-                ): Container(),
+                ): Container() : Container(),
                 SizedBox(
                   height: 16,
                 ),

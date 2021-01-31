@@ -16,14 +16,16 @@ class Notification {
     }else{
       User.qtsNewProposals = 0;
     }
+
     if(json['finished_schedule'] != null){
-      scheduleNotification = Schedule.fromJson(json['finished_schedule']);
+      scheduleNotification = Schedule.fromJsonToNotification(json['finished_schedule']);
+      User.lastSchedulefinished = scheduleNotification;
     }
-    User.lastSchedulefinished = scheduleNotification;
+
 
     List canceledListJson = json['canceled'];
+    User.scheduleListCanceled = [];
     if(canceledListJson.length > 0){
-      User.scheduleListCanceled = [];
       User.canceled = true;
       canceledListJson.forEach((value) {
         CanceledSchedule schedule = CanceledSchedule.fromJson(value);
@@ -32,7 +34,7 @@ class Notification {
     }else{
       User.canceled = false;
     }
-    print(User.scheduleListCanceled.length);
+
     if(User.qtsNewProposals > 0 || User.lastSchedulefinished != null || User.scheduleListCanceled.length > 0){
       User.haveNotifications = true;
     }

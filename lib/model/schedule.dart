@@ -53,9 +53,16 @@ class Schedule {
     providerAvatar= providerId == User.userId ? User.image : json['users_data'][0]['avatar'];
     //contractorAvatar = contractorId == User.userId ? User.image : json['users_data']['avatar'];
     emailToSendMessage =  json['users_data'][0]['email'];
-
-
   }
+
+  Schedule.fromJsonToNotification(Map<String, dynamic> json){
+    scheduleId = json['id'];
+    providerId = json['id_provider'];
+    contractorId = json['id_contractor'];
+    finish = json['finish'];
+    date = json['date'];
+  }
+
 }
 
 class ScheduleResponse {

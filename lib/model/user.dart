@@ -13,9 +13,9 @@ class User {
   static String age;
   static int qtsNewProposals;
   static bool haveNotifications = false;
-  static Schedule lastSchedulefinished;
+  static Schedule lastSchedulefinished ;
   static bool canceled = false;
-  static List<CanceledSchedule> scheduleListCanceled;
+  static List<CanceledSchedule> scheduleListCanceled = [];
 
 
 
