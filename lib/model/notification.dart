@@ -10,13 +10,9 @@ class Notification {
 
   Notification.fromJson(Map<String, dynamic> json) {
     List proposalListJson = json['proposals'];
-    if(proposalListJson != []){
-      proposalListJson.forEach((value) {
-        proposalList.add(Proposal.fromJson(value));
-      });
-    }
-    if(proposalList != []){
-      User.qtsNewProposals = proposalList.length;
+
+    if(proposalListJson.length > 0){
+      User.qtsNewProposals = proposalListJson.length;
     }else{
       User.qtsNewProposals = 0;
     }
@@ -24,17 +20,21 @@ class Notification {
       scheduleNotification = Schedule.fromJson(json['finished_schedule']);
     }
     User.lastSchedulefinished = scheduleNotification;
-    if(User.qtsNewProposals > 0 || User.lastSchedulefinished != null){
-      User.haveNotifications = true;
-    }
+
     List canceledListJson = json['canceled'];
     if(canceledListJson.length > 0){
+      User.scheduleListCanceled = [];
       User.canceled = true;
       canceledListJson.forEach((value) {
-        User.scheduleListCanceled.add(CanceledSchedule.fromJson(value));
+        CanceledSchedule schedule = CanceledSchedule.fromJson(value);
+        User.scheduleListCanceled.add(schedule);
       });
     }else{
       User.canceled = false;
+    }
+    print(User.scheduleListCanceled.length);
+    if(User.qtsNewProposals > 0 || User.lastSchedulefinished != null || User.scheduleListCanceled.length > 0){
+      User.haveNotifications = true;
     }
   }
 }
@@ -64,7 +64,9 @@ class CanceledSchedule{
 
   CanceledSchedule.fromJson(Map<String, dynamic> json){
     talentCanceledDate = DateTime.parse(json['date']);
-    talentCanceledName = json['talent']['talent'];
+    talentCanceledName = json['talent'][0]['talent'];
+    print('papagaiop');
+
   }
 
 }

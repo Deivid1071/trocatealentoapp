@@ -149,7 +149,7 @@ class _NotificationAlertDialogState extends State<NotificationAlertDialog> {
                   margin: EdgeInsets.only(
                       left: 8, bottom: 8, right: 8, top: 16),
                   child: Text(
-                    '${User.scheduleListCanceled.length} foram cancelados',
+                    'Agendamentos cancelados : ${User.scheduleListCanceled.length} ',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontFamily: 'Nunito',
@@ -160,6 +160,7 @@ class _NotificationAlertDialogState extends State<NotificationAlertDialog> {
                 ) : Container(),
                 User.canceled && User.haveNotifications ? Column(
                   children: User.scheduleListCanceled.map((e) {
+
                     return Text(e.talentCanceledName + '   ' + e.talentCanceledDate.day.toString() +'/'+ e.talentCanceledDate.month.toString(), style: TextStyle(
                         fontFamily: 'Nunito',
                         fontSize: 15,

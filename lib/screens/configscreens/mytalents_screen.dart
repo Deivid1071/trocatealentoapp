@@ -64,8 +64,11 @@ class _MyTalentsScreenState extends State<MyTalentsScreen> {
                           if (response.resultListTalents.isNotEmpty && response.resultListTalents != null) {
                             return _buildListTalent(response.resultListTalents);
                           }else{
-                            return Center(
-                              child: Text('Talento não encontrado.'),
+                            return Container(
+                              height: MediaQuery.of(context).size.height*0.6,
+                              child: Center(
+                                child: Text('Talento não encontrado.'),
+                              ),
                             );
                           }
                         }

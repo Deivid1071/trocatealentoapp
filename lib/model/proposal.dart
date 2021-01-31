@@ -8,6 +8,8 @@ class Proposal {
   String date;
   int talentId;
   String accepted;
+  String contractorIdUser;
+  String providerIdUser;
   String providerName;
   String contractorName;
   String providerAvatar;
@@ -33,11 +35,12 @@ class Proposal {
     date = json['date'];
     talentId = json['talentId'];
     accepted = json['accepted'];
-    providerName = providerId == User.userId ? User.name : json['users_data'][0]['username'];
-    //contractorName = contractorId == User.userId ? User.name : json['users_data'][1]['username'];
-    providerAvatar= providerId == User.userId ? User.image : json['users_data'][0]['avatar'];
-    //contractorAvatar = contractorId == User.userId ? User.image : json['users_data'][1]['avatar'];
-
+    contractorIdUser = json['users_data'][1]['id'];
+    providerIdUser = json['users_data'][0]['id'];
+    providerName = json['users_data'][providerIdUser == providerId ? 0 : 1]['username'];
+    contractorName = json['users_data'][contractorIdUser == contractorId ? 1 : 0]['username'];
+    providerAvatar=  json['users_data'][providerIdUser == providerId ? 0 : 1]['avatar'];
+    contractorAvatar = json['users_data'][contractorIdUser == contractorId ? 1 : 0]['avatar'];
   }
 
 }

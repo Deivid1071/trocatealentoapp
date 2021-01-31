@@ -30,7 +30,8 @@ class _PerfilConfigScreenState extends State<PerfilConfigScreen> {
     _emailController = TextEditingController(text: User.email);
     _nameController = TextEditingController(text: User.name);
     _passwordController = TextEditingController();
-    _idadeController = TextEditingController(text: User.age);
+    _idadeController = TextEditingController(text: User.age == '0' ? '' : User.age);
+    print(User.age);
     api = UserApiService();
     super.initState();
   }
@@ -156,7 +157,7 @@ class _PerfilConfigScreenState extends State<PerfilConfigScreen> {
                           ),
                           suffix: Icon(Icons.edit,color: Colors.white),
                           hint: 'Idade do usuário',
-                          textInputType: TextInputType.emailAddress,
+                          textInputType: TextInputType.number,
                         ),
                         SizedBox(
                           height: 8,

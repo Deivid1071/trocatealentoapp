@@ -26,6 +26,7 @@ class User {
     email = json['user']['email'];
     tcoin = json['user']['tcoin'];
     image = json['user']['avatar'];
+    age = json['user']['age'].toString();
   }
 
 

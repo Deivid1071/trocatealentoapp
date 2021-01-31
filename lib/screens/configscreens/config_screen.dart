@@ -125,6 +125,7 @@ class _UserConfigScreenState extends State<UserConfigScreen> {
                         User.haveNotifications = false;
                         User.lastSchedulefinished = null;
                         User.qtsNewProposals = null;
+                        User.scheduleListCanceled = null;
                         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> LoginScreen()), (route) => false);
                       },
                       child: Container(

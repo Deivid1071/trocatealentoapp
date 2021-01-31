@@ -93,7 +93,7 @@ class TalentApiService {
   Future<TalentResponse> getTalentById(String id) async {
     try {
       final response = await http
-          .get("$_baseUrl/talent/detail/$id",
+          .get("$_baseUrl/detail/talent/$id",
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Accept': 'application/json',

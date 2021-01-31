@@ -27,7 +27,7 @@ class AuthorizationApiService {
       switch (response.statusCode) {
         case 200:
           //crypto(password, email);
-
+          User.haveNotifications = true;
           return UserResponse.fromJson(json.decode(response.body));
           break;
         case 400:

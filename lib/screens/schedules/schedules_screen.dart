@@ -37,9 +37,6 @@ class _SchedulesScreenState extends State<SchedulesScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(
-              height: 20,
-            ),
             FutureBuilder(
                 future: proposalApi.getProposalData(),
                 builder: (context, snapshot) {
@@ -61,9 +58,62 @@ class _SchedulesScreenState extends State<SchedulesScreen> {
                             child: Text(response.error),
                           );
                         } else {
+                          bool showWidget = false;
+                          List<Proposal> propostas = [];
+                          response.result.forEach((element) {
+                            if(element.providerId == User.userId ){
+                              showWidget = true;
+                              propostas.add(element);
+                            }
+                          });
                           if (response.result.isNotEmpty) {
-                            return _buildListInvite('Propostas recebidas',
-                                proposalList: response.result, isSended: false);
+                            return showWidget ? _buildListInvite('Propostas recebidas',
+                                proposalList: propostas, isSended: false) : Container();
+                          }else{
+                            return Center(
+                              child: Text('Você não possui solicitações no momento'),
+                            );
+                          }
+                        }
+                      }
+                      return Container();
+                      break;
+                  }
+                  return Container();
+                },),
+
+            FutureBuilder(
+                future: proposalApi.getProposalData(),
+                builder: (context, snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.none:
+                      break;
+                    case ConnectionState.waiting:
+                      return CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation(Color(0xFF2F9C7F)),
+                      );
+                      break;
+                    case ConnectionState.active:
+                      break;
+                    case ConnectionState.done:
+                      if (snapshot.hasData) {
+                        final ProposalResponse response = snapshot.data;
+                        if (response.error.isNotEmpty) {
+                          return Center(
+                            child: Text(response.error),
+                          );
+                        } else {
+                          bool showWidget = false;
+                          List<Proposal> propostas = [];
+                          response.result.forEach((element) {
+                            if(element.contractorId == User.userId ) {
+                              showWidget = true;
+                              propostas.add(element);
+                            }
+
+                          });
+                          if (response.result.isNotEmpty) {
+                            return showWidget ? _buildListInvite('Propostas enviadas',proposalList: propostas, isSended: true):Container();
                           }else{
                             return Center(
                               child: Text('Você não possui solicitações no momento'),
@@ -76,10 +126,7 @@ class _SchedulesScreenState extends State<SchedulesScreen> {
                   }
                   return Container();
                 }),
-            /*SizedBox(
-              height: 40,
-            ),
-            _buildListInvite('Propostas enviadas', isSended: true),*/
+
             SizedBox(
               height: 40,
             ),
@@ -104,6 +151,7 @@ class _SchedulesScreenState extends State<SchedulesScreen> {
                             child: Text(response.error),
                           );
                         } else {
+
                           if (response.result.isNotEmpty) {
                             return _buildListSchedule('Agendamentos confirmados', response.result);
                           }else{
@@ -127,6 +175,9 @@ class _SchedulesScreenState extends State<SchedulesScreen> {
   _buildListInvite(String title, {List<Proposal> proposalList, bool isSended}) {
     return Column(
       children: [
+        SizedBox(
+          height: 40,
+        ),
         Text(
           title,
           style: TextStyle(

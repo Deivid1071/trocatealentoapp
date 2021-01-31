@@ -37,14 +37,16 @@ class _SearchTalentScreenState extends State<SearchTalentScreen> {
   }
 
   _verifyNotifications()async{
-    await apiNotification.getMyNotifications();
-    if(User.canceled || User.lastSchedulefinished != null || User.qtsNewProposals > 0 ){
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return NotificationAlertDialog();
-        },
-      );
+    if(User.haveNotifications){
+      await apiNotification.getMyNotifications();
+      if(User.canceled || User.lastSchedulefinished != null || User.qtsNewProposals > 0 ){
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return NotificationAlertDialog();
+          },
+        );
+      }
     }
   }
 

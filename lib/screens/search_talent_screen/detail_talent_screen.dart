@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:trocatalentos_app/model/talent.dart';
 import 'package:trocatalentos_app/model/user.dart';
+import 'package:trocatalentos_app/screens/home/home_screen.dart';
 import 'dart:convert';
 import 'package:trocatalentos_app/services/proposal_api_service.dart';
 import 'package:trocatalentos_app/services/talent_api_service.dart';
@@ -52,6 +53,7 @@ class _DetailTalentScreenState extends State<DetailTalentScreen> {
   getTalentData() async {
     TalentResponse talentResponse =
         await apiTalent.getTalentById(widget.talentId.toString());
+
     setState(() {
       isLoading = false;
     });
@@ -177,25 +179,41 @@ class _DetailTalentScreenState extends State<DetailTalentScreen> {
                                   color: Color(0xFF2F9C7F)),
                             ),
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Icon(
-                                  Icons.star,
+                                  talent.avaliacao >= 1
+                                      ? Icons.star
+                                      : Icons.star_border,
+                                  size: 35,
                                   color: Color(0xFF2F9C7F),
                                 ),
                                 Icon(
-                                  Icons.star_border,
+                                  talent.avaliacao >= 2
+                                      ? Icons.star
+                                      : Icons.star_border,
+                                  size: 35,
                                   color: Color(0xFF2F9C7F),
                                 ),
                                 Icon(
-                                  Icons.star_border,
+                                  talent.avaliacao >= 3
+                                      ? Icons.star
+                                      : Icons.star_border,
+                                  size: 35,
                                   color: Color(0xFF2F9C7F),
                                 ),
                                 Icon(
-                                  Icons.star_border,
+                                  talent.avaliacao >= 4
+                                      ? Icons.star
+                                      : Icons.star_border,
+                                  size: 35,
                                   color: Color(0xFF2F9C7F),
                                 ),
                                 Icon(
-                                  Icons.star_border,
+                                  talent.avaliacao >= 5
+                                      ? Icons.star
+                                      : Icons.star_border,
+                                  size: 35,
                                   color: Color(0xFF2F9C7F),
                                 ),
                               ],
@@ -265,7 +283,8 @@ class _DetailTalentScreenState extends State<DetailTalentScreen> {
                         builder: (BuildContext context) {
                           return _dialogSchedule(
                               "Selecione a data que gostaria de agendar \n Titulo do Talento");
-                        });
+                        }).then((value) => Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => HomeScreen())));
                   },
                   padding: EdgeInsets.all(15.0),
                   shape: RoundedRectangleBorder(
@@ -506,7 +525,7 @@ class _DetailTalentScreenState extends State<DetailTalentScreen> {
                                     ':' +
                                     '00';
                                 String response = await apiProposal
-                                    .createProposal(User.userId, date, talent.tcoin, talent.talentId);
+                                    .createProposal(talent.userTalentId, date, talent.tcoin, talent.talentId);
                                 print(response);
                                 setState(()  {
                                   isLoadingDialog = false;
