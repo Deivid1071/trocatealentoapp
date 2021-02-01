@@ -58,7 +58,7 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
         ),
         child: ExpansionTile(
           title: Text(
-            "Agendamento em ${daySchedule.length < 2 ? '0$daySchedule' : '$daySchedule'}/${monthSchedule.length < 2 ? '0$monthSchedule' : '$monthSchedule'}",
+            "Agendamento em ${daySchedule.length < 2 ? '0$daySchedule' : '$daySchedule'}/${monthSchedule.length < 2 ? '0$monthSchedule' : '$monthSchedule'} - ${widget.schedule.talentName}",
             style: TextStyle(
               fontFamily: 'Nunito',
               fontWeight: FontWeight.bold,

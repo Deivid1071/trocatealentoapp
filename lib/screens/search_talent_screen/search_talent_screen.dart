@@ -2,6 +2,7 @@
 
 import 'package:trocatalentos_app/model/talent.dart';
 import 'package:trocatalentos_app/model/user.dart';
+import 'package:trocatalentos_app/screens/home/home_screen.dart';
 import 'package:trocatalentos_app/services/notification_api_service.dart';
 import 'package:trocatalentos_app/services/talent_api_service.dart';
 import 'package:flutter/material.dart';
@@ -45,12 +46,10 @@ class _SearchTalentScreenState extends State<SearchTalentScreen> {
           builder: (BuildContext context) {
             return NotificationAlertDialog();
           },
-        );
+        ).then((value) => Navigator.push(context, MaterialPageRoute(builder: (context)=> HomeScreen())));
       }
     }
   }
-
-
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(

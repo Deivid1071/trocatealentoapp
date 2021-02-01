@@ -42,10 +42,11 @@ class NotificationApiService {
     }
   }
 
-  Future<String> sendRating(int rating, int talentId) async {
+  Future<String> sendRating(int rating, int scheduleId) async {
+
     try {
       final response = await http
-          .post("$_baseUrl/finish/schedule/$talentId",
+          .post("$_baseUrl/finish/schedule/$scheduleId",
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
             'Accept': 'application/json',
@@ -59,6 +60,8 @@ class NotificationApiService {
       print(response.statusCode);
       switch (response.statusCode) {
         case 200:
+          User.tcoin = json.decode(response.body)['tcoin'];
+          User.haveNotifications = false;
           return '${response.statusCode}';
           break;
         case 400:

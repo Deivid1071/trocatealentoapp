@@ -27,6 +27,9 @@ class User {
     tcoin = json['user']['tcoin'];
     image = json['user']['avatar'];
     age = json['user']['age'].toString();
+    /*if(tcoin < 0){
+      tcoin = 0;
+    }*/
   }
 
 

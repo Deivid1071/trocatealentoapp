@@ -63,7 +63,7 @@ class _NotificationAlertDialogState extends State<NotificationAlertDialog> {
                         margin: EdgeInsets.only(
                             left: 8, bottom: 8, right: 8, top: 16),
                         child: Text(
-                          'Como você avalia o talento: \nNome do talento',
+                          'Como você avalia o talento: \n${User.lastSchedulefinished.talentName??''}',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontFamily: 'Nunito',
@@ -185,10 +185,9 @@ class _NotificationAlertDialogState extends State<NotificationAlertDialog> {
                                   if (User.lastSchedulefinished != null) {
                                     setState(() {
                                       isLoadingDialog = true;
-                                      print('Enviar');
                                     });
                                     String response = await apiNotification
-                                        .sendRating(ratingValue, 1);
+                                        .sendRating(ratingValue, User.lastSchedulefinished.scheduleId);
                                     setState(() {
                                       isLoadingDialog = false;
                                       doneRequest = true;
