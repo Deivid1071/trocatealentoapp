@@ -2,6 +2,7 @@ import 'package:trocatalentos_app/model/user.dart';
 
 class Schedule {
   String providerId;
+  String providerIdUser;
   String contractorId;
   int scheduleId;
   String date;
@@ -21,6 +22,7 @@ class Schedule {
 
   Schedule(
       {this.providerId,
+
       this.contractorId,
       this.talentTcoin,
       this.scheduleId,
@@ -48,11 +50,10 @@ class Schedule {
     talentName = json['talent']['talent'];
     rating = json['talent']['rating'];
     description = json['talent']['description'];
-    providerName = providerId == User.userId ? User.name : json['users_data'][0]['username'];
-    //contractorName = contractorId == User.userId ? User.name : json['users_data']['username'];
-    providerAvatar= providerId == User.userId ? User.image : json['users_data'][0]['avatar'];
-    //contractorAvatar = contractorId == User.userId ? User.image : json['users_data']['avatar'];
-    emailToSendMessage =  json['users_data'][0]['email'];
+    providerIdUser = json['users_data'][0]['id'];
+    providerName = json['users_data'][providerIdUser == providerId ? 0 : 1]['username'];
+    providerAvatar=  json['users_data'][providerIdUser == providerId ? 0 : 1]['avatar'];
+
   }
 
   Schedule.fromJsonToNotification(Map<String, dynamic> json){
