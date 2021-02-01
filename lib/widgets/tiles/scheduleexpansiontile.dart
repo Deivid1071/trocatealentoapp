@@ -105,25 +105,41 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
                   children: [
                     Container(
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(
-                            Icons.star,
+                            widget.schedule.rating >= 1
+                                ? Icons.star
+                                : Icons.star_border,
+                            size: 35,
                             color: Colors.white,
                           ),
                           Icon(
-                            Icons.star_border,
+                            widget.schedule.rating >= 2
+                                ? Icons.star
+                                : Icons.star_border,
+                            size: 35,
                             color: Colors.white,
                           ),
                           Icon(
-                            Icons.star_border,
+                            widget.schedule.rating >= 3
+                                ? Icons.star
+                                : Icons.star_border,
+                            size: 35,
                             color: Colors.white,
                           ),
                           Icon(
-                            Icons.star_border,
+                            widget.schedule.rating >= 4
+                                ? Icons.star
+                                : Icons.star_border,
+                            size: 35,
                             color: Colors.white,
                           ),
                           Icon(
-                            Icons.star_border,
+                            widget.schedule.rating >= 5
+                                ? Icons.star
+                                : Icons.star_border,
+                            size: 35,
                             color: Colors.white,
                           ),
                         ],

@@ -67,7 +67,7 @@ class CanceledSchedule{
   CanceledSchedule.fromJson(Map<String, dynamic> json){
     talentCanceledDate = DateTime.parse(json['date']);
     talentCanceledName = json['talent'][0]['talent'];
-    print('papagaiop');
+
 
   }
 

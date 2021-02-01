@@ -46,7 +46,10 @@ class _SearchTalentScreenState extends State<SearchTalentScreen> {
           builder: (BuildContext context) {
             return NotificationAlertDialog();
           },
-        ).then((value) => Navigator.push(context, MaterialPageRoute(builder: (context)=> HomeScreen())));
+        ).then((value) {
+          User.haveNotifications = false;
+          Navigator.push(context, MaterialPageRoute(builder: (context)=> HomeScreen()));
+        });
       }
     }
   }

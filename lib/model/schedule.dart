@@ -61,6 +61,7 @@ class Schedule {
     contractorId = json['id_contractor'];
     finish = json['finish'];
     date = json['date'];
+    talentName = json['talent']['talent'];
   }
 
 }
